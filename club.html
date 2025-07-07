@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>КлубоГид - клуб</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div>
+    <h2 id="clubTitle"></h2>
+    <p id="clubDesc"></p>
+    <button id="back">Вернуться к клубам</button>
+  </div>
+  <script>
+    const tg = window.Telegram.WebApp;
+    tg.ready();
+    tg.expand();
+    const params = new URLSearchParams(location.search);
+    const club = params.get('club');
+    const title = document.getElementById('clubTitle');
+    const desc = document.getElementById('clubDesc');
+    switch(club){
+      case 'itkids':
+        title.textContent = 'Клуб программирования "IT Kids"';
+        desc.textContent = 'Занятия по основам разработки и робототехники для детей';
+        break;
+      case 'forte':
+        title.textContent = 'Школа музыки "Форте"';
+        desc.textContent = 'Уроки игры на инструментах для начинающих и продолжающих';
+        break;
+      case 'athlete':
+        title.textContent = 'Спортивная секция "Юный атлет"';
+        desc.textContent = 'Общая физическая подготовка и тренировки для детей разного возраста';
+        break;
+      default:
+        title.textContent = 'Клуб';
+    }
+    document.getElementById('back').onclick = () => history.back();
+    tg.onEvent('themeChanged', () => {
+      document.body.style.background = tg.themeParams.bg_color || '#f5f5f5';
+    });
+  </script>
+</body>
+</html>
