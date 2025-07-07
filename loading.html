@@ -2,21 +2,25 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>КлубоГид</title>
+  <title>КлубоГид - поиск</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <button id="start">Начать</button>
+  <div>
+    <p>Подбираем подходящие клубы...</p>
+    <div class="loader"></div>
+  </div>
   <script>
     const tg = window.Telegram.WebApp;
     tg.ready();
     tg.expand();
-    document.getElementById('start').onclick = () => location.href = 'welcome.html';
+    setTimeout(() => location.href = 'results.html', 5000);
     tg.onEvent('themeChanged', () => {
       document.body.style.background = tg.themeParams.bg_color || '#f5f5f5';
     });
   </script>
 </body>
 </html>
+
