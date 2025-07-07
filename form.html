@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>КлубоГид - анкета</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .step { display: none; flex-direction: column; align-items: center; }
+    .step.active { display: flex; }
+  </style>
+</head>
+<body>
+  <div id="step-age" class="step active">
+    <label>Возраст ребёнка</label>
+    <input type="number" id="age" min="3" max="18" value="6">
+    <div id="ageError" class="error hidden">Возраст должен быть от 3 до 18 лет</div>
+    <button id="ageNext">Далее</button>
+  </div>
+  <div id="step-gender" class="step">
+    <label>Пол ребёнка</label>
+    <label><input type="radio" name="gender" value="boy"> Мальчик</label>
+    <label><input type="radio" name="gender" value="girl"> Девочка</label>
+    <label><input type="radio" name="gender" value="other"> Другое</label>
+    <div style="font-size:0.9rem">Можно выбрать «Другое», если гендерная категория не подходит</div>
+    <button id="genderNext" disabled>Далее</button>
+  </div>
+  <div id="step-address" class="step">
+    <label>Адрес проживания</label>
+    <input type="text" id="address" placeholder="Введите адрес">
+    <button id="geo">Определить по GPS</button>
+    <button id="addressNext">Далее</button>
+  </div>
+  <div id="step-transport" class="step">
+    <label>Предпочтительный способ добраться</label>
+    <select id="transport">
+      <option value="" selected disabled>Выберите</option>
+      <option value="walk">Пешком</option>
+      <option value="car">На машине</option>
+      <option value="public">Общественным транспортом</option>
+    </select>
+    <div style="font-size:0.9rem">Этот выбор повлияет на расчёт маршрутов и времени в дальнейшем</div>
+    <button id="transportNext" disabled>Далее</button>
+  </div>
+  <div id="step-range" class="step">
+    <label>Время в пути, мин</label>
+    <input type="range" id="time" min="5" max="60" value="30">
+    <div id="timeValue">До 30 мин</div>
+    <button id="rangeNext">Далее</button>
+  </div>
+  <div id="step-interests" class="step">
+    <label>Интересы ребёнка (до 5 направлений)</label>
+    <div>
+      <label><input type="checkbox" class="interest" value="sport"> Спорт</label>
+      <label><input type="checkbox" class="interest" value="music"> Музыка</label>
+      <label><input type="checkbox" class="interest" value="coding"> Программирование</label>
+      <label><input type="checkbox" class="interest" value="languages"> Языки</label>
+      <label><input type="checkbox" class="interest" value="art"> Творчество</label>
+      <label><input type="checkbox" class="interest" value="science"> Наука</label>
+    </div>
+    <button id="finish" disabled>Подобрать</button>
+  </div>
+  <script>
+    const tg = window.Telegram.WebApp;
+    tg.ready();
+    tg.expand();
+
+    const steps = ['step-age','step-gender','step-address','step-transport','step-range','step-interests'];
+    let current = 0;
+    function showStep(i){
+      steps.forEach((id,idx) => {
+        const el = document.getElementById(id);
+        if(idx === i){
+          el.classList.add('active');
+          el.classList.remove('hidden');
+        } else {
+          el.classList.remove('active');
+          el.classList.add('hidden');
+        }
+      });
+    }
+    showStep(current);
+
+    // Age validation
+    const ageInput = document.getElementById('age');
+    const ageError = document.getElementById('ageError');
+    const ageNext = document.getElementById('ageNext');
+    function validateAge(){
+      const v = parseInt(ageInput.value,10);
+      if(isNaN(v) || v<3 || v>18){
+        ageError.classList.remove('hidden');
+        ageNext.disabled = true;
+      } else {
+        ageError.classList.add('hidden');
+        ageNext.disabled = false;
+      }
+    }
+    ageInput.addEventListener('input', validateAge);
+    validateAge();
+    ageNext.onclick = () => { current++; showStep(current); };
+
+    // Gender
+    const genderRadios = document.querySelectorAll('input[name="gender"]');
+    const genderNext = document.getElementById('genderNext');
+    genderRadios.forEach(r=> r.onchange = ()=>{ genderNext.disabled = false; });
+    genderNext.onclick = () => { current++; showStep(current); };
+
+    // Address
+    document.getElementById('geo').onclick = () => tg.requestLocation();
+    document.getElementById('addressNext').onclick = () => { current++; showStep(current); };
+
+    // Transport
+    const transport = document.getElementById('transport');
+    const transportNext = document.getElementById('transportNext');
+    transport.onchange = () => { transportNext.disabled = !transport.value; };
+    transportNext.onclick = () => { current++; showStep(current); };
+
+    // Range
+    const timeRange = document.getElementById('time');
+    const timeValue = document.getElementById('timeValue');
+    timeRange.oninput = () => { timeValue.textContent = 'До ' + timeRange.value + ' мин'; };
+    document.getElementById('rangeNext').onclick = () => { current++; showStep(current); };
+
+    // Interests
+    const interests = document.querySelectorAll('.interest');
+    const finish = document.getElementById('finish');
+    interests.forEach(ch=> ch.onchange = () => {
+      const checked = document.querySelectorAll('.interest:checked');
+      finish.disabled = checked.length === 0 || checked.length > 5;
+    });
+    finish.onclick = () => location.href = 'loading.html';
+
+    tg.onEvent('themeChanged', () => {
+      document.body.style.background = tg.themeParams.bg_color || '#f5f5f5';
+    });
+  </script>
+</body>
+</html>
+
