@@ -15,7 +15,7 @@ body {
 /* container for centered content */
 .container {
   width: 100%;
-  max-width: 320px;
+  max-width: clamp(320px, 100%, 480px);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -199,8 +199,8 @@ input[type="checkbox"] {
   background: var(--tg-theme-bg-color, #fff);
   padding: 1rem;
   border-radius: 1rem;
-  width: 100vw;
-  max-width: 320px;
+  width: 100%;
+  max-width: clamp(320px, 100%, 480px);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -212,8 +212,8 @@ input[type="checkbox"] {
   background: var(--tg-theme-bg-color, #fff);
   padding: 1rem;
   border-radius: 1rem;
-  width: 100vw;
-  max-width: 320px;
+  width: 100%;
+  max-width: clamp(320px, 100%, 480px);
   display: flex;
   flex-direction: column;
   align-items: center;
