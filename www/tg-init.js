@@ -1,5 +1,6 @@
 window.addEventListener('DOMContentLoaded', () => {
   const tg = window.Telegram.WebApp;
+  window.tg = tg;
   if (!tg) return;
   tg.ready();
   tg.expand();
