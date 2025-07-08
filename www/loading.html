@@ -8,6 +8,7 @@
   <script src="./tg-init.js" defer></script>
   <base href="./">
   <link rel="stylesheet" href="./style.css">
+  <link rel="manifest" href="manifest.json">
 </head>
 <body>
   <div class="container">
@@ -16,6 +17,11 @@
   </div>
   <script>
     setTimeout(() => location.href = 'results.html', 5000);
+  </script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("sw.js");
+    }
   </script>
 </body>
 </html>
