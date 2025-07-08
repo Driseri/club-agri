@@ -13,18 +13,11 @@
   <div class="container">
     <h2>Подходящие клубы</h2>
     <div class="cards">
-      <div class="card" data-club="itkids">Клуб программирования "IT Kids"</div>
-      <div class="card" data-club="forte">Школа музыки "Форте"</div>
-      <div class="card" data-club="athlete">Спортивная секция "Юный атлет"</div>
+      <a class="card" href="club.html?club=itkids" role="button" aria-label="Клуб программирования IT Kids">Клуб программирования "IT Kids"</a>
+      <a class="card" href="club.html?club=forte" role="button" aria-label="Школа музыки Форте">Школа музыки "Форте"</a>
+      <a class="card" href="club.html?club=athlete" role="button" aria-label="Спортивная секция Юный атлет">Спортивная секция "Юный атлет"</a>
     </div>
   </div>
-  <script>
-    document.querySelectorAll('.card').forEach(card => {
-      card.addEventListener('pointerup', () => {
-        location.href = 'club.html?club=' + card.dataset.club;
-      });
-    });
-  </script>
 </body>
 </html>
 
