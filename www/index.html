@@ -8,10 +8,21 @@
   <script src="./tg-init.js" defer></script>
   <base href="./">
   <link rel="stylesheet" href="./style.css">
+  <link rel="manifest" href="manifest.json">
 </head>
 <body>
   <div class="container">
     <a id="start" class="button" href="welcome.html" role="button" aria-label="Начать">Начать</a>
   </div>
+  <script>
+    document.getElementById('start').addEventListener('pointerup', () => {
+      location.href = 'welcome.html';
+    });
+  </script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("sw.js");
+    }
+  </script>
 </body>
 </html>
