@@ -26,7 +26,7 @@ jobs:
           username: ${{ secrets.FTP_USER }}
           password: ${{ secrets.FTP_PASSWORD }}
           # Локальная папка с собранным сайтом (замените, если у вас не ./public)
-          local-dir: ./www
+          local-dir: ./www/
           # Путь на сервере, куда заливаются файлы (замените на ваш)
           server-dir: /.
           # Доп. опции (можно убрать --insecure, если SSL-сертификат на сервере валидный)
