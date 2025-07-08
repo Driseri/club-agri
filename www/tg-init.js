@@ -1,11 +1,11 @@
-(() => {
+window.addEventListener('DOMContentLoaded', () => {
   const tg = window.Telegram.WebApp;
   if (!tg) return;
   tg.ready();
   tg.expand();
 
   const applyTheme = () => {
-    document.body.style.background = tg.themeParams.bg_color || '#f5f5f5';
+    document.body.style.background = tg.themeParams?.bg_color || '#f5f5f5';
   };
 
   tg.onEvent('themeChanged', applyTheme);
@@ -19,4 +19,4 @@
       // ignore if back button not supported
     }
   }
-})();
+});
