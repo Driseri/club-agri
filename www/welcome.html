@@ -23,8 +23,12 @@
   <script>
     const agree = document.getElementById('agree');
     const next = document.getElementById('next');
-    agree.onchange = () => { next.disabled = !agree.checked; };
-    next.onclick = () => location.href = 'form.html';
+    agree.addEventListener('input', () => {
+      next.disabled = !agree.checked;
+    });
+    next.addEventListener('pointerup', () => {
+      location.href = 'form.html';
+    });
   </script>
 </body>
 </html>

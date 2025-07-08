@@ -204,14 +204,20 @@
       if(!isNaN(v)){ age=Math.max(3,Math.min(18,v)); }
       updateDial();
     });
-    ageMinus.onclick=()=>{ if(age>3){ age--; updateDial(); } };
-    agePlus.onclick=()=>{ if(age<18){ age++; updateDial(); } };
+    ageMinus.addEventListener('pointerup', () => {
+      if(age>3){ age--; updateDial(); }
+    });
+    agePlus.addEventListener('pointerup', () => {
+      if(age<18){ age++; updateDial(); }
+    });
     let startY;
     dial.addEventListener("pointerdown",e=>{ startY=e.clientY; });
     dial.addEventListener("pointerup",e=>{ const diff=e.clientY-startY; if(Math.abs(diff)>30){ if(diff>0&&age>3) age--; if(diff<0&&age<18) age++; updateDial(); } });
     createDial();
     updateDial();
-    ageNext.onclick=()=>{ current++; showStep(current); };
+    ageNext.addEventListener('pointerup', () => {
+      current++; showStep(current);
+    });
 
 
     // Gender segmented control
@@ -221,7 +227,7 @@
     const genderError = document.getElementById('genderError');
     const genderNext = document.getElementById('genderNext');
     genderInputs.forEach(input => {
-      input.addEventListener('change', () => {
+      input.addEventListener('input', () => {
         genderSegments.forEach(s => s.classList.remove('selected'));
         input.parentElement.classList.add('selected','pulse');
         setTimeout(()=>input.parentElement.classList.remove('pulse'),150);
@@ -230,7 +236,7 @@
         genderControl.classList.remove('error');
       });
     });
-    genderNext.onclick = () => {
+    genderNext.addEventListener('pointerup', () => {
       const chosen = document.querySelector('input[name="gender"]:checked');
       if(!chosen){
         genderError.classList.remove('hidden');
@@ -238,11 +244,13 @@
       } else {
         current++; showStep(current);
       }
-    };
+    });
 
     // Address
-    document.getElementById('geo').onclick = () => tg.requestLocation();
-    document.getElementById('addressNext').onclick = () => { current++; showStep(current); };
+    document.getElementById('geo').addEventListener('pointerup', () => tg.requestLocation());
+    document.getElementById('addressNext').addEventListener('pointerup', () => {
+      current++; showStep(current);
+    });
 
     // Transport segmented control
     const transportInputs = document.querySelectorAll('input[name="transport"]');
@@ -260,7 +268,7 @@
     moveAccent(transportSegments[0]);
 
     transportInputs.forEach(input => {
-      input.addEventListener('change', () => {
+      input.addEventListener('input', () => {
         transportSegments.forEach(s => s.classList.remove('selected'));
         const seg = input.parentElement;
         seg.classList.add('selected','jump');
@@ -273,7 +281,7 @@
       });
     });
 
-    transportNext.onclick = () => {
+    transportNext.addEventListener('pointerup', () => {
       const chosen = document.querySelector('input[name="transport"]:checked');
       if(!chosen){
         transportError.classList.remove('hidden');
@@ -282,7 +290,7 @@
       } else {
         current++; showStep(current);
       }
-    };
+    });
 
     // Time selector
     const timeRange = document.getElementById('timeRange');
@@ -320,11 +328,13 @@
     timeRange.addEventListener('input', e => updateTime(e.target.value));
 
     document.querySelectorAll('.time-chip').forEach(btn=>{
-      btn.addEventListener('click',()=>updateTime(parseInt(btn.dataset.value,10)));
+      btn.addEventListener('pointerup',()=>updateTime(parseInt(btn.dataset.value,10)));
     });
 
       updateTime(timeRange.value);
-    timeNext.onclick=()=>{ current++; showStep(current); };
+    timeNext.addEventListener('pointerup', () => {
+      current++; showStep(current);
+    });
 
     // Interests with swipe carousel
     const disciplines = [
@@ -364,10 +374,12 @@
       }
       card.addEventListener("animationend", () => { card.remove(); checkEnd(); });
     }
-    likeBtn.onclick = () => handleChoice(true);
-    skipBtn.onclick = () => handleChoice(false);
+    likeBtn.addEventListener('pointerup', () => handleChoice(true));
+    skipBtn.addEventListener('pointerup', () => handleChoice(false));
     updateButtons();
-    finish.onclick = () => location.href = "loading.html";
+    finish.addEventListener('pointerup', () => {
+      location.href = "loading.html";
+    });
 
   </script>
 </body>

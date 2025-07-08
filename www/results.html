@@ -20,7 +20,9 @@
   </div>
   <script>
     document.querySelectorAll('.card').forEach(card => {
-      card.onclick = () => location.href = 'club.html?club=' + card.dataset.club;
+      card.addEventListener('pointerup', () => {
+        location.href = 'club.html?club=' + card.dataset.club;
+      });
     });
   </script>
 </body>
