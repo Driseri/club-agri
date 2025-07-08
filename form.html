@@ -5,6 +5,7 @@
   <title>КлубоГид - анкета</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script src="tg-init.js"></script>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -113,9 +114,6 @@
     <button id="finish" disabled>Подобрать</button>
   </div>
   <script>
-    const tg = window.Telegram.WebApp;
-    tg.ready();
-    tg.expand();
 
     const steps = ['step-age','step-gender','step-address','step-transport','step-range','step-interests'];
     let current = 0;
@@ -322,9 +320,6 @@
     updateButtons();
     finish.onclick = () => location.href = "loading.html";
 
-    tg.onEvent('themeChanged', () => {
-      document.body.style.background = tg.themeParams.bg_color || '#f5f5f5';
-    });
   </script>
 </body>
 </html>
