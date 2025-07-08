@@ -49,6 +49,11 @@ button:active {
 .container input[type="range"] {
   width: 100%;
 }
+input[type="checkbox"] {
+  width: 1.2rem;
+  height: 1.2rem;
+  accent-color: var(--tg-theme-button-color, #3390ec);
+}
 
 .hidden { display: none; }
 .error { color: red; font-size: 0.9rem; }
@@ -107,8 +112,8 @@ button:active {
 }
 .disc-card {
   position: relative;
-  flex: 0 0 70%;
-  margin-right: 5%;
+  flex: 0 0 100%;
+  margin-right: 0;
   background: var(--tg-theme-secondary-bg-color, #fff);
   border-radius: 0.75rem;
   padding: 1rem;
@@ -220,11 +225,6 @@ button:active {
   transition: transform 0.2s, color 0.2s;
   font-size: 1rem;
 }
-.dial-number.recommended {
-  border: 1px solid var(--tg-theme-button-color, #3390ec);
-  border-radius: 50%;
-  padding: 2px 4px;
-}
 .circle-btn {
   width: 40px;
   height: 40px;
@@ -242,17 +242,12 @@ button:active {
 }
 .age-input {
   width: 80px;
+  padding: 0.6rem;
   text-align: center;
-}
-.preview {
-  position: absolute;
-  right: -70px;
-  top: 50%;
-  transform: translateY(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-size: 0.9rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--tg-theme-hint-color, #ccc);
+  font-size: 1rem;
+  box-sizing: border-box;
 }
 .selected-age {
   position: absolute;
@@ -262,8 +257,8 @@ button:active {
   font-size: 2rem;
   color: var(--tg-theme-button-color, #3390ec);
 }
-.dial-wrapper #ageMinus { left: -20px; }
-.dial-wrapper #agePlus { right: -20px; }
+.dial-wrapper #ageMinus { left: -40px; }
+.dial-wrapper #agePlus { right: -40px; }
 .hint { font-size: 0.9rem; color: var(--tg-theme-hint-color, #666); }
 
 /* Gender segmented control */
