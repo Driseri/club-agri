@@ -194,7 +194,7 @@ input[type="checkbox"] {
   background: var(--tg-theme-bg-color, #fff);
   padding: 1rem;
   border-radius: 1rem;
-  width: 280px;
+  width: min(90vw, 320px);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -206,7 +206,7 @@ input[type="checkbox"] {
   background: var(--tg-theme-bg-color, #fff);
   padding: 1rem;
   border-radius: 1rem;
-  width: 280px;
+  width: min(90vw, 320px);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -233,12 +233,12 @@ input[type="checkbox"] {
 }
 #timeTrack {
   fill: none;
-  stroke: var(--tg-theme-hint-color, #ccc);
+  stroke: url(#timeGradient);
   stroke-width: 6;
 }
 #timeFill {
   fill: none;
-  stroke: var(--tg-theme-button-color, #3390ec);
+  stroke: url(#timeGradient);
   stroke-width: 6;
   stroke-linecap: round;
   transform: rotate(-90deg);
