@@ -163,3 +163,201 @@ button:active {
 @keyframes swipe-left {
   to { transform: translateX(-120%) rotate(-15deg); opacity: 0; }
 }
+/* Age selector modal */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fade 0.2s ease;
+}
+.age-modal {
+  background: var(--tg-theme-bg-color, #fff);
+  padding: 1rem;
+  border-radius: 1rem;
+  width: 280px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  animation: scale 0.2s ease;
+}
+@keyframes scale {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+.dial-wrapper {
+  position: relative;
+  width: 200px;
+  height: 200px;
+}
+.dial {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  transition: transform 0.3s cubic-bezier(.33,1,.68,1);
+}
+.dial-number {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform-origin: 0 -80px;
+  color: var(--tg-theme-hint-color, #888);
+  transition: transform 0.2s, color 0.2s;
+  font-size: 1rem;
+}
+.dial-number.recommended {
+  border: 1px solid var(--tg-theme-button-color, #3390ec);
+  border-radius: 50%;
+  padding: 2px 4px;
+}
+.circle-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: var(--tg-theme-button-color, #3390ec);
+  color: var(--tg-theme-button-text-color, #fff);
+  font-size: 1.2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.age-input {
+  width: 80px;
+  text-align: center;
+}
+.preview {
+  position: absolute;
+  right: -70px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 0.9rem;
+}
+.selected-age {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2rem;
+  color: var(--tg-theme-button-color, #3390ec);
+}
+.hint { font-size: 0.9rem; color: var(--tg-theme-hint-color, #666); }
+
+/* Gender segmented control */
+.gender-control {
+  display: flex;
+  gap: 0.5rem;
+  width: 80%;
+  justify-content: center;
+}
+.gender-segment {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.5rem;
+  background: #F5F5F5;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #555;
+  transition: background-color 0.2s, color 0.2s, transform 0.15s;
+}
+.gender-segment input { display: none; }
+.gender-segment .icon {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 0.25rem;
+  fill: currentColor;
+}
+.gender-segment:hover,
+.gender-segment:focus-within {
+  border: 2px solid var(--tg-theme-button-color, #3390ec);
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+}
+.gender-segment.selected {
+  background: var(--tg-theme-button-color, #3390ec);
+  color: var(--tg-theme-button-text-color, #fff);
+}
+.gender-control.error {
+  border: 2px solid red;
+  border-radius: 8px;
+  padding: 0.5rem;
+}
+.pulse {
+  animation: pulse 150ms;
+}
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* Transport segmented control */
+.transport-control {
+  position: relative;
+  display: flex;
+  gap: 8px;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 12px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+  margin-top: -2rem;
+}
+.transport-segment {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.5rem 0;
+  background: #F0F0F0;
+  border-radius: 8px;
+  color: #888;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.1s;
+}
+.transport-segment input { display: none; }
+.transport-segment .icon {
+  width: 36px;
+  height: 36px;
+  margin-bottom: 0.25rem;
+  fill: currentColor;
+}
+.transport-segment:hover,
+.transport-segment:focus-within {
+  background: #fff;
+  border: 2px solid var(--tg-theme-button-color, #3390ec);
+  box-shadow: 0 0 12px rgba(0,0,0,0.15);
+}
+.transport-segment.selected {
+  background: var(--tg-theme-button-color, #3390ec);
+  color: var(--tg-theme-button-text-color, #fff);
+}
+.transport-segment.jump {
+  animation: jump 100ms;
+}
+.transport-control.error {
+  animation: pulse 200ms;
+}
+.accent {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: var(--tg-theme-button-color, #3390ec);
+  opacity: 0;
+  border-radius: 2px;
+  transition: left 0.2s ease, width 0.2s ease, opacity 0.2s ease;
+  pointer-events: none;
+}
+@keyframes jump {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+  100% { transform: translateY(0); }
+}

@@ -8,16 +8,53 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div id="step-age" class="step container active">
-    <label>Возраст ребёнка</label>
-    <input type="number" id="age" min="3" max="18" value="6">
-    <div id="ageError" class="error hidden">Возраст должен быть от 3 до 18 лет</div>
-    <button id="ageNext">Далее</button>
+  <div id="step-age" class="step active">
+    <div id="ageOverlay" class="overlay">
+      <div id="ageModal" class="age-modal">
+        <div class="dial-wrapper">
+          <button id="ageMinus" class="circle-btn">&#8722;</button>
+          <div id="dial" class="dial"></div>
+          <div id="selectedAge" class="selected-age">7</div>
+          <div id="agePreview" class="preview"><div>👶</div><div id="previewText">7 лет</div></div>
+          <button id="agePlus" class="circle-btn">+</button>
+        </div>
+        <input type="text" id="ageInput" class="age-input" value="7">
+        <div id="ageError" class="error hidden">От 3 до 18 лет</div>
+        <div class="hint">Возраст поможет подобрать оптимальную группу</div>
+        <button id="ageNext" disabled>Далее</button>
+      </div>
+    </div>
   </div>
   <div id="step-gender" class="step container">
     <label>Пол ребёнка</label>
-    <label><input type="radio" name="gender" value="boy"> Мальчик</label>
-    <label><input type="radio" name="gender" value="girl"> Девочка</label>
+    <div id="genderControl" class="gender-control">
+      <label class="gender-segment">
+        <input type="radio" name="gender" value="boy">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="5" r="3" />
+          <path d="M9 22v-6H7l2-5h6l2 5h-2v6" />
+        </svg>
+        <span>Мальчик</span>
+      </label>
+      <label class="gender-segment">
+        <input type="radio" name="gender" value="girl">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="5" r="3" />
+          <path d="M8 22v-4l4-6 4 6v4" />
+        </svg>
+        <span>Девочка</span>
+      </label>
+      <label class="gender-segment">
+        <input type="radio" name="gender" value="any">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="5" r="3" />
+          <rect x="10" y="9" width="4" height="8" />
+          <path d="M10 17v4M14 17v4M8 12h8" />
+        </svg>
+        <span>Не важно</span>
+      </label>
+    </div>
+    <div id="genderError" class="error hidden">Пожалуйста, выберите пол ребёнка</div>
     <button id="genderNext" disabled>Далее</button>
   </div>
   <div id="step-address" class="step container">
@@ -26,15 +63,37 @@
     <button id="geo">Определить по GPS</button>
     <button id="addressNext">Далее</button>
   </div>
-  <div id="step-transport" class="step container">
+  <div id="step-transport" class="step">
     <label>Предпочтительный способ добраться</label>
-    <select id="transport">
-      <option value="" selected disabled>Выберите</option>
-      <option value="walk">Пешком</option>
-      <option value="car">На машине</option>
-      <option value="public">Общественным транспортом</option>
-    </select>
-    <div style="font-size:0.9rem">Этот выбор повлияет на расчёт маршрутов и времени в дальнейшем</div>
+    <div id="transportControl" class="transport-control">
+      <label class="transport-segment">
+        <input type="radio" name="transport" value="walk">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2a2 2 0 110 4 2 2 0 010-4zM10 22v-6l-2-4 4-2 2 2h2l3 5v5" />
+        </svg>
+        <span>Пешком</span>
+      </label>
+      <label class="transport-segment">
+        <input type="radio" name="transport" value="car">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 13l2-5h14l2 5M5 13v5h2v-2h10v2h2v-5" />
+          <circle cx="7" cy="18" r="1.5" />
+          <circle cx="17" cy="18" r="1.5" />
+        </svg>
+        <span>На машине</span>
+      </label>
+      <label class="transport-segment">
+        <input type="radio" name="transport" value="public">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3" y="5" width="18" height="12" rx="2" />
+          <path d="M3 13h18M8 18v2M16 18v2" />
+        </svg>
+        <span>Общественный</span>
+      </label>
+      <div id="transportAccent" class="accent"></div>
+    </div>
+    <div id="transportError" class="error hidden">Пожалуйста, выберите способ перемещения</div>
+    <div class="hint">Этот выбор повлияет на расчёт маршрутов и времени в дальнейшем</div>
     <button id="transportNext" disabled>Далее</button>
   </div>
   <div id="step-range" class="step container">
@@ -74,39 +133,139 @@
     }
     showStep(current);
 
-    // Age validation
-    const ageInput = document.getElementById('age');
-    const ageError = document.getElementById('ageError');
-    const ageNext = document.getElementById('ageNext');
-    function validateAge(){
-      const v = parseInt(ageInput.value,10);
-      if(isNaN(v) || v<3 || v>18){
-        ageError.classList.remove('hidden');
-        ageNext.disabled = true;
-      } else {
-        ageError.classList.add('hidden');
-        ageNext.disabled = false;
+    // Age selector
+    const ageInput = document.getElementById("ageInput");
+    const ageError = document.getElementById("ageError");
+    const ageNext = document.getElementById("ageNext");
+    const dial = document.getElementById("dial");
+    const selectedAgeEl = document.getElementById("selectedAge");
+    const ageMinus = document.getElementById("ageMinus");
+    const agePlus = document.getElementById("agePlus");
+    const previewText = document.getElementById("previewText");
+    const stepDeg = 360/16;
+    let age = 7;
+
+    function createDial(){
+      for(let i=3;i<=18;i++){
+        const d=document.createElement("div");
+        d.className="dial-number";
+        if(i>=6 && i<=8) d.classList.add("recommended");
+        d.dataset.age=i;
+        dial.appendChild(d);
       }
     }
-    ageInput.addEventListener('input', validateAge);
-    validateAge();
-    ageNext.onclick = () => { current++; showStep(current); };
 
-    // Gender
-    const genderRadios = document.querySelectorAll('input[name="gender"]');
+    function updateDial(){
+      dial.style.transform = "rotate(" + (-(age-3)*stepDeg) + "deg)";
+      Array.from(dial.children).forEach(el=>{
+        const v=parseInt(el.dataset.age,10);
+        const angle=(v-3)*stepDeg;
+        const active=v===age;
+        const scale=active?1.4:1;
+        el.style.transform="rotate("+angle+"deg) translate(0,-80px) rotate("+(-angle)+"deg) scale("+scale+")";
+        el.style.color=active?"var(--tg-theme-button-color, #3390ec)":"";
+      });
+      selectedAgeEl.textContent=age;
+      ageInput.value=age;
+      previewText.textContent=age+" лет";
+      validateAge();
+    }
+
+    function validateAge(){
+      const v=parseInt(ageInput.value,10);
+      if(isNaN(v)||v<3||v>18){
+        ageError.classList.remove("hidden");
+        ageNext.disabled=true;
+      }else{
+        ageError.classList.add("hidden");
+        ageNext.disabled=false;
+      }
+    }
+
+    ageInput.addEventListener("input",()=>{
+      const v=parseInt(ageInput.value,10);
+      if(!isNaN(v)){ age=Math.max(3,Math.min(18,v)); }
+      updateDial();
+    });
+    ageMinus.onclick=()=>{ if(age>3){ age--; updateDial(); } };
+    agePlus.onclick=()=>{ if(age<18){ age++; updateDial(); } };
+    let startY;
+    dial.addEventListener("pointerdown",e=>{ startY=e.clientY; });
+    dial.addEventListener("pointerup",e=>{ const diff=e.clientY-startY; if(Math.abs(diff)>30){ if(diff>0&&age>3) age--; if(diff<0&&age<18) age++; updateDial(); } });
+    createDial();
+    updateDial();
+    ageNext.onclick=()=>{ current++; showStep(current); };
+
+
+    // Gender segmented control
+    const genderInputs = document.querySelectorAll('input[name="gender"]');
+    const genderSegments = document.querySelectorAll('.gender-segment');
+    const genderControl = document.getElementById('genderControl');
+    const genderError = document.getElementById('genderError');
     const genderNext = document.getElementById('genderNext');
-    genderRadios.forEach(r=> r.onchange = ()=>{ genderNext.disabled = false; });
-    genderNext.onclick = () => { current++; showStep(current); };
+    genderInputs.forEach(input => {
+      input.addEventListener('change', () => {
+        genderSegments.forEach(s => s.classList.remove('selected'));
+        input.parentElement.classList.add('selected','pulse');
+        setTimeout(()=>input.parentElement.classList.remove('pulse'),150);
+        genderNext.disabled = false;
+        genderError.classList.add('hidden');
+        genderControl.classList.remove('error');
+      });
+    });
+    genderNext.onclick = () => {
+      const chosen = document.querySelector('input[name="gender"]:checked');
+      if(!chosen){
+        genderError.classList.remove('hidden');
+        genderControl.classList.add('error');
+      } else {
+        current++; showStep(current);
+      }
+    };
 
     // Address
     document.getElementById('geo').onclick = () => tg.requestLocation();
     document.getElementById('addressNext').onclick = () => { current++; showStep(current); };
 
-    // Transport
-    const transport = document.getElementById('transport');
+    // Transport segmented control
+    const transportInputs = document.querySelectorAll('input[name="transport"]');
+    const transportSegments = document.querySelectorAll('.transport-segment');
+    const transportAccent = document.getElementById('transportAccent');
+    const transportControl = document.getElementById('transportControl');
+    const transportError = document.getElementById('transportError');
     const transportNext = document.getElementById('transportNext');
-    transport.onchange = () => { transportNext.disabled = !transport.value; };
-    transportNext.onclick = () => { current++; showStep(current); };
+
+    function moveAccent(el){
+      transportAccent.style.width = el.offsetWidth + 'px';
+      transportAccent.style.left = el.offsetLeft + 'px';
+    }
+
+    moveAccent(transportSegments[0]);
+
+    transportInputs.forEach(input => {
+      input.addEventListener('change', () => {
+        transportSegments.forEach(s => s.classList.remove('selected'));
+        const seg = input.parentElement;
+        seg.classList.add('selected','jump');
+        moveAccent(seg);
+        transportAccent.style.opacity = '1';
+        setTimeout(()=>seg.classList.remove('jump'),100);
+        transportNext.disabled = false;
+        transportError.classList.add('hidden');
+        transportControl.classList.remove('error');
+      });
+    });
+
+    transportNext.onclick = () => {
+      const chosen = document.querySelector('input[name="transport"]:checked');
+      if(!chosen){
+        transportError.classList.remove('hidden');
+        transportControl.classList.add('error');
+        setTimeout(()=>transportControl.classList.remove('error'),200);
+      } else {
+        current++; showStep(current);
+      }
+    };
 
     // Range
     const timeRange = document.getElementById('time');
