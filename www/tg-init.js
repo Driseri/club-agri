@@ -13,6 +13,7 @@ window.addEventListener('DOMContentLoaded', () => {
   };
 
   tg.onEvent('viewportChanged', updateVh);
+  window.addEventListener('resize', updateVh);
   updateVh();
 
   const applyTheme = () => {
