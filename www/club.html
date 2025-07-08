@@ -36,7 +36,9 @@
       default:
         title.textContent = 'Клуб';
     }
-    document.getElementById('back').onclick = () => history.back();
+    document.getElementById('back').addEventListener('pointerup', () => {
+      history.back();
+    });
   </script>
 </body>
 </html>

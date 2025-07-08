@@ -14,7 +14,9 @@
     <button id="start">Начать</button>
   </div>
   <script>
-    document.getElementById('start').onclick = () => location.href = 'welcome.html';
+    document.getElementById('start').addEventListener('pointerup', () => {
+      location.href = 'welcome.html';
+    });
   </script>
 </body>
 </html>

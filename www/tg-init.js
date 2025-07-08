@@ -4,6 +4,16 @@ window.addEventListener('DOMContentLoaded', () => {
   tg.ready();
   tg.expand();
 
+  const updateVh = () => {
+    const h = tg.viewportHeight || window.innerHeight;
+    const sh = tg.viewportStableHeight || h;
+    document.documentElement.style.setProperty('--vh', `${h / 100}px`);
+    document.documentElement.style.setProperty('--tg-navbar', `${sh - h}px`);
+  };
+
+  tg.onEvent('viewportChanged', updateVh);
+  updateVh();
+
   const applyTheme = () => {
     document.body.style.background = tg.themeParams?.bg_color || '#f5f5f5';
   };
