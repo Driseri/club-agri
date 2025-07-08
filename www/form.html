@@ -247,7 +247,7 @@
     });
 
     // Address
-    document.getElementById('geo').addEventListener('pointerup', () => tg.requestLocation());
+    document.getElementById('geo').addEventListener('pointerup', () => window.tg.requestLocation());
     document.getElementById('addressNext').addEventListener('pointerup', () => {
       current++; showStep(current);
     });
