@@ -44,14 +44,12 @@
     <button id="rangeNext">Далее</button>
   </div>
   <div id="step-interests" class="step container">
-    <label>Интересы ребёнка (до 5 направлений)</label>
-    <div>
-      <label><input type="checkbox" class="interest" value="sport"> Спорт</label>
-      <label><input type="checkbox" class="interest" value="music"> Музыка</label>
-      <label><input type="checkbox" class="interest" value="coding"> Программирование</label>
-      <label><input type="checkbox" class="interest" value="languages"> Языки</label>
-      <label><input type="checkbox" class="interest" value="art"> Творчество</label>
-      <label><input type="checkbox" class="interest" value="science"> Наука</label>
+    <label>Выберите интересующие направления</label>
+    <div id="selected" class="selected"></div>
+    <div class="carousel"><div id="discTrack" class="track"></div></div>
+    <div class="swipe-buttons">
+      <button id="likeBtn">Мне интересно</button>
+      <button id="skipBtn">Пропустить</button>
     </div>
     <button id="finish" disabled>Подобрать</button>
   </div>
@@ -116,14 +114,54 @@
     timeRange.oninput = () => { timeValue.textContent = 'До ' + timeRange.value + ' мин'; };
     document.getElementById('rangeNext').onclick = () => { current++; showStep(current); };
 
-    // Interests
-    const interests = document.querySelectorAll('.interest');
-    const finish = document.getElementById('finish');
-    interests.forEach(ch=> ch.onchange = () => {
-      const checked = document.querySelectorAll('.interest:checked');
-      finish.disabled = checked.length === 0 || checked.length > 5;
+    // Interests with swipe carousel
+    const disciplines = [
+      {id:"sport",title:"Спорт",icon:"🏃",tag:"Будь сильным"},
+      {id:"music",title:"Музыка",icon:"🎸",tag:"Музыка для души"},
+      {id:"coding",title:"Программирование",icon:"🤖",tag:"Развивай логику"},
+      {id:"languages",title:"Языки",icon:"📚",tag:"Открой мир"},
+      {id:"art",title:"Творчество",icon:"🎨",tag:"Прояви талант"},
+      {id:"science",title:"Наука",icon:"🔬",tag:"Познай новое"}
+    ];
+    const track = document.getElementById("discTrack");
+    const likeBtn = document.getElementById("likeBtn");
+    const skipBtn = document.getElementById("skipBtn");
+    const selected = document.getElementById("selected");
+    const finish = document.getElementById("finish");
+    let chosen = [];
+    disciplines.forEach(d => {
+      const card = document.createElement("div");
+      card.className = "disc-card";
+      card.dataset.value = d.id;
+      card.innerHTML = `<div class="icon">${d.icon}</div><div>${d.title}</div><div class="tagline">${d.tag}</div>`;
+      attachSwipe(card);
+      track.appendChild(card);
     });
-    finish.onclick = () => location.href = 'loading.html';
+    function updateButtons(){ finish.disabled = chosen.length === 0; }
+    function checkEnd(){ if(!track.children.length){ likeBtn.disabled = true; skipBtn.disabled = true; } }
+    function handleChoice(like){
+      const card = track.children[0];
+      if(!card) return;
+      card.classList.add(like ? "swipe-right" : "swipe-left");
+      if(like){
+        chosen.push(card.dataset.value);
+        const chip = document.createElement("span");
+        chip.className = "chip";
+        chip.textContent = card.querySelector("div:nth-child(2)").textContent;
+        selected.appendChild(chip);
+        updateButtons();
+      }
+      card.addEventListener("animationend", () => { card.remove(); checkEnd(); });
+    }
+    likeBtn.onclick = () => handleChoice(true);
+    skipBtn.onclick = () => handleChoice(false);
+    function attachSwipe(el){
+      let startX;
+      el.addEventListener("pointerdown", e => { startX = e.clientX; });
+      el.addEventListener("pointerup", e => { const diff = e.clientX - startX; if(Math.abs(diff) > 50){ handleChoice(diff > 0); } });
+    }
+    updateButtons();
+    finish.onclick = () => location.href = "loading.html";
 
     tg.onEvent('themeChanged', () => {
       document.body.style.background = tg.themeParams.bg_color || '#f5f5f5';
