@@ -15,8 +15,7 @@
         <div class="dial-wrapper">
           <button id="ageMinus" class="circle-btn">&#8722;</button>
           <div id="dial" class="dial"></div>
-          <div id="selectedAge" class="selected-age">7</div>
-          <div id="agePreview" class="preview"><div>👶</div><div id="previewText">7 лет</div></div>
+          <div id="selectedAge" class="selected-age">7 лет</div>
           <button id="agePlus" class="circle-btn">+</button>
         </div>
         <input type="text" id="ageInput" class="age-input" value="7">
@@ -139,15 +138,19 @@
     const selectedAgeEl = document.getElementById("selectedAge");
     const ageMinus = document.getElementById("ageMinus");
     const agePlus = document.getElementById("agePlus");
-    const previewText = document.getElementById("previewText");
     const stepDeg = 360/16;
     let age = 7;
+
+    function pluralAge(n){
+      if(n % 10 === 1 && n % 100 !== 11) return 'год';
+      if([2,3,4].includes(n % 10) && ![12,13,14].includes(n % 100)) return 'года';
+      return 'лет';
+    }
 
     function createDial(){
       for(let i=3;i<=18;i++){
         const d=document.createElement("div");
         d.className="dial-number";
-        if(i>=6 && i<=8) d.classList.add("recommended");
         d.textContent = i;
         d.dataset.age=i;
         dial.appendChild(d);
@@ -155,18 +158,18 @@
     }
 
     function updateDial(){
-      dial.style.transform = "rotate(" + (-(age-3)*stepDeg) + "deg)";
+      const dialRot = -(age-3)*stepDeg;
+      dial.style.transform = "rotate(" + dialRot + "deg)";
       Array.from(dial.children).forEach(el=>{
         const v=parseInt(el.dataset.age,10);
         const angle=(v-3)*stepDeg;
         const active=v===age;
         const scale=active?1.4:1;
-        el.style.transform="rotate("+angle+"deg) translate(0,-80px) rotate("+(-angle)+"deg) scale("+scale+")";
+        el.style.transform="rotate("+angle+"deg) translate(0,-80px) rotate("+(-angle-dialRot)+"deg) scale("+scale+")";
         el.style.color=active?"var(--tg-theme-button-color, #3390ec)":"";
       });
-      selectedAgeEl.textContent=age;
+      selectedAgeEl.textContent = age + ' ' + pluralAge(age);
       ageInput.value=age;
-      previewText.textContent=age+" лет";
       validateAge();
     }
 
