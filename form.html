@@ -105,13 +105,13 @@
   </div>
   <div id="step-interests" class="step container">
     <label>Выберите интересующие направления</label>
-    <div id="selected" class="selected"></div>
     <div class="carousel"><div id="discTrack" class="track"></div></div>
     <div class="swipe-buttons">
       <button id="likeBtn">Мне интересно</button>
       <button id="skipBtn">Пропустить</button>
     </div>
-    <button id="finish" disabled>Подобрать</button>
+    <div id="selected" class="selected"></div>
+    <button id="finish" class="finish-btn" disabled>Подобрать</button>
   </div>
   <script>
 
@@ -148,6 +148,7 @@
         const d=document.createElement("div");
         d.className="dial-number";
         if(i>=6 && i<=8) d.classList.add("recommended");
+        d.textContent = i;
         d.dataset.age=i;
         dial.appendChild(d);
       }
@@ -291,7 +292,6 @@
       card.className = "disc-card";
       card.dataset.value = d.id;
       card.innerHTML = `<div class="icon">${d.icon}</div><div>${d.title}</div><div class="tagline">${d.tag}</div>`;
-      attachSwipe(card);
       track.appendChild(card);
     });
     function updateButtons(){ finish.disabled = chosen.length === 0; }
@@ -312,11 +312,6 @@
     }
     likeBtn.onclick = () => handleChoice(true);
     skipBtn.onclick = () => handleChoice(false);
-    function attachSwipe(el){
-      let startX;
-      el.addEventListener("pointerdown", e => { startX = e.clientX; });
-      el.addEventListener("pointerup", e => { const diff = e.clientX - startX; if(Math.abs(diff) > 50){ handleChoice(diff > 0); } });
-    }
     updateButtons();
     finish.onclick = () => location.href = "loading.html";
 

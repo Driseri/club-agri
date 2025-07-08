@@ -127,11 +127,22 @@ button:active {
 .swipe-buttons {
   display: flex;
   gap: 1rem;
+  width: 100%;
+}
+.swipe-buttons button {
+  flex: 1;
+}
+.finish-btn {
+  margin-top: 1rem;
+  background: #FF9800;
+  color: #fff;
+  width: 100%;
 }
 .selected {
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
+  margin-top: 0.5rem;
 }
 .selected .chip {
   background: var(--tg-theme-secondary-bg-color, #ddd);
@@ -225,6 +236,9 @@ button:active {
   display: flex;
   justify-content: center;
   align-items: center;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
 }
 .age-input {
   width: 80px;
@@ -248,6 +262,8 @@ button:active {
   font-size: 2rem;
   color: var(--tg-theme-button-color, #3390ec);
 }
+.dial-wrapper #ageMinus { left: -20px; }
+.dial-wrapper #agePlus { right: -20px; }
 .hint { font-size: 0.9rem; color: var(--tg-theme-hint-color, #666); }
 
 /* Gender segmented control */
