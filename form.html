@@ -96,11 +96,29 @@
     <div class="hint">Этот выбор повлияет на расчёт маршрутов и времени в дальнейшем</div>
     <button id="transportNext" disabled>Далее</button>
   </div>
-  <div id="step-range" class="step container">
-    <label>Время в пути, мин</label>
-    <input type="range" id="time" min="5" max="60" value="30">
-    <div id="timeValue">До 30 мин</div>
-    <button id="rangeNext">Далее</button>
+  <div id="step-range" class="step">
+    <div id="timeOverlay" class="overlay">
+      <div id="timeModal" class="time-modal">
+        <h3>Максимальное время в пути</h3>
+        <div class="timer">
+          <svg id="timeSvg" viewBox="0 0 200 110">
+            <path id="timeTrack" d="M10 100 A90 90 0 0 1 190 100" />
+            <path id="timeFill" d="M10 100 A90 90 0 0 1 190 100" />
+            <g id="timeMarks"></g>
+          </svg>
+          <div id="timeThumb" class="time-thumb"></div>
+          <div id="timeDisplay" class="time-display">30 мин</div>
+        </div>
+        <div class="time-chips">
+          <button class="time-chip" data-value="15">15 мин</button>
+          <button class="time-chip" data-value="30">30 мин</button>
+          <button class="time-chip" data-value="45">45 мин</button>
+          <button class="time-chip" data-value="60">60 мин</button>
+        </div>
+        <div id="timeHint" class="hint hidden">Минимум 5 мин</div>
+        <button id="timeNext" disabled>Далее</button>
+      </div>
+    </div>
   </div>
   <div id="step-interests" class="step container">
     <label>Выберите интересующие направления</label>
@@ -158,14 +176,14 @@
     }
 
     function updateDial(){
-      const dialRot = -(age-3)*stepDeg;
-      dial.style.transform = "rotate(" + dialRot + "deg)";
+      const offset = (age-3)*stepDeg;
+      dial.style.transform = "";
       Array.from(dial.children).forEach(el=>{
         const v=parseInt(el.dataset.age,10);
-        const angle=(v-3)*stepDeg;
+        const angle=(v-3)*stepDeg - offset;
         const active=v===age;
         const scale=active?1.4:1;
-        el.style.transform="rotate("+angle+"deg) translate(0,-80px) rotate("+(-angle-dialRot)+"deg) scale("+scale+")";
+        el.style.transform="rotate("+angle+"deg) translate(0,-80px) rotate("+(-angle)+"deg) scale("+scale+")";
         el.style.color=active?"var(--tg-theme-button-color, #3390ec)":"";
       });
       selectedAgeEl.textContent = age + ' ' + pluralAge(age);
@@ -269,11 +287,86 @@
       }
     };
 
-    // Range
-    const timeRange = document.getElementById('time');
-    const timeValue = document.getElementById('timeValue');
-    timeRange.oninput = () => { timeValue.textContent = 'До ' + timeRange.value + ' мин'; };
-    document.getElementById('rangeNext').onclick = () => { current++; showStep(current); };
+    // Time selector
+    const timeThumb = document.getElementById('timeThumb');
+    const timeDisplay = document.getElementById('timeDisplay');
+    const timeFill = document.getElementById('timeFill');
+    const timeMarks = document.getElementById('timeMarks');
+    const timeNext = document.getElementById('timeNext');
+    const timeHint = document.getElementById('timeHint');
+    const timeSvg = document.getElementById('timeSvg');
+    let time = 30;
+
+    for(let i=0;i<=60;i+=5){
+      const ang=i/60*180;
+      const len=i%15===0?10:5;
+      const x1=100-90*Math.cos(Math.PI*ang/180);
+      const y1=100-90*Math.sin(Math.PI*ang/180);
+      const x2=100-(90-len)*Math.cos(Math.PI*ang/180);
+      const y2=100-(90-len)*Math.sin(Math.PI*ang/180);
+      const line=document.createElementNS('http://www.w3.org/2000/svg','line');
+      line.setAttribute('x1',x1); line.setAttribute('y1',y1);
+      line.setAttribute('x2',x2); line.setAttribute('y2',y2);
+      line.setAttribute('stroke','#666');
+      line.setAttribute('stroke-width', i%15===0?2:1);
+      if(i%15===0){
+        const txt=document.createElementNS('http://www.w3.org/2000/svg','text');
+        txt.setAttribute('x',100-75*Math.cos(Math.PI*ang/180));
+        txt.setAttribute('y',100-75*Math.sin(Math.PI*ang/180)+4);
+        txt.setAttribute('text-anchor','middle');
+        txt.setAttribute('font-size','12');
+        txt.textContent=i;
+        timeMarks.appendChild(txt);
+      }
+      timeMarks.appendChild(line);
+    }
+
+    const arcLength = timeFill.getTotalLength();
+    timeFill.style.strokeDasharray = arcLength;
+
+    function updateTime(val){
+      if(val<5){
+        timeHint.classList.remove('hidden');
+        val=5;
+      }else{
+        timeHint.classList.add('hidden');
+      }
+      time = Math.min(60,Math.max(5,Math.round(val)));
+      const ang = time/60*180;
+      timeThumb.style.transform = `rotate(${ang}deg)`;
+      timeFill.style.strokeDashoffset = arcLength*(1-time/60);
+      timeDisplay.textContent = time + ' мин';
+      timeDisplay.classList.add('pulse');
+      setTimeout(()=>timeDisplay.classList.remove('pulse'),150);
+      timeNext.disabled = time<5 || time>60;
+    }
+
+    function valueFromEvent(e){
+      const rect=timeSvg.getBoundingClientRect();
+      const cx=rect.left+rect.width/2;
+      const cy=rect.top+rect.height;
+      const raw=Math.atan2(cy-e.clientY,e.clientX-cx)*180/Math.PI;
+      let ang=180-raw;
+      ang=Math.max(0,Math.min(180,ang));
+      return ang/180*60;
+    }
+
+    function pointerMove(e){ updateTime(valueFromEvent(e)); }
+
+    timeSvg.addEventListener('pointerdown',e=>{
+      pointerMove(e);
+      window.addEventListener('pointermove',pointerMove);
+      window.addEventListener('pointerup',()=>{
+        window.removeEventListener('pointermove',pointerMove);
+      },{once:true});
+    });
+
+    document.querySelectorAll('.time-chip').forEach(btn=>{
+      btn.addEventListener('click',()=>updateTime(parseInt(btn.dataset.value,10)));
+    });
+
+    updateTime(time);
+    timeNext.onclick=()=>{ current++; showStep(current); };
 
     // Interests with swipe carousel
     const disciplines = [
