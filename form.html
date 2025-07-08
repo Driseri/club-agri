@@ -102,6 +102,12 @@
         <h3>Максимальное время в пути</h3>
         <div class="timer">
           <svg id="timeSvg" viewBox="0 0 200 110">
+            <defs>
+              <linearGradient id="timeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#4caf50" />
+                <stop offset="100%" stop-color="#f44336" />
+              </linearGradient>
+            </defs>
             <path id="timeTrack" d="M10 100 A90 90 0 0 1 190 100" />
             <path id="timeFill" d="M10 100 A90 90 0 0 1 190 100" />
             <g id="timeMarks"></g>
@@ -114,6 +120,7 @@
           <button class="time-chip" data-value="30">30 мин</button>
           <button class="time-chip" data-value="45">45 мин</button>
           <button class="time-chip" data-value="60">60 мин</button>
+          <button class="time-chip" data-value="90">1.5 ч</button>
         </div>
         <div id="timeHint" class="hint hidden">Минимум 5 мин</div>
         <button id="timeNext" disabled>Далее</button>
@@ -295,10 +302,11 @@
     const timeNext = document.getElementById('timeNext');
     const timeHint = document.getElementById('timeHint');
     const timeSvg = document.getElementById('timeSvg');
+    const timeMax = 90;
     let time = 30;
 
-    for(let i=0;i<=60;i+=5){
-      const ang=i/60*180;
+    for(let i=0;i<=timeMax;i+=5){
+      const ang=i/timeMax*180;
       const len=i%15===0?10:5;
       const x1=100-90*Math.cos(Math.PI*ang/180);
       const y1=100-90*Math.sin(Math.PI*ang/180);
@@ -331,14 +339,21 @@
       }else{
         timeHint.classList.add('hidden');
       }
-      time = Math.min(60,Math.max(5,Math.round(val)));
-      const ang = time/60*180;
+      time = Math.min(timeMax,Math.max(5,Math.round(val)));
+      const ang = time/timeMax*180;
       timeThumb.style.transform = `rotate(${ang}deg)`;
-      timeFill.style.strokeDashoffset = arcLength*(1-time/60);
-      timeDisplay.textContent = time + ' мин';
+      timeFill.style.strokeDashoffset = arcLength*(1-time/timeMax);
+      const hours = Math.floor(time/60);
+      const minutes = time % 60;
+      if(hours){
+        const minText = minutes ? ' ' + minutes + ' мин' : '';
+        timeDisplay.textContent = hours + ' ч' + minText;
+      }else{
+        timeDisplay.textContent = time + ' мин';
+      }
       timeDisplay.classList.add('pulse');
       setTimeout(()=>timeDisplay.classList.remove('pulse'),150);
-      timeNext.disabled = time<5 || time>60;
+      timeNext.disabled = time<5 || time>timeMax;
     }
 
     function valueFromEvent(e){
@@ -348,7 +363,7 @@
       const raw=Math.atan2(cy-e.clientY,e.clientX-cx)*180/Math.PI;
       let ang=180-raw;
       ang=Math.max(0,Math.min(180,ang));
-      return ang/180*60;
+      return ang/180*timeMax;
     }
 
     function pointerMove(e){ updateTime(valueFromEvent(e)); }
