@@ -1,5 +1,6 @@
 window.addEventListener('DOMContentLoaded', () => {
   const tg = window.Telegram.WebApp;
+  window.tg = tg;
   if (!tg) return;
   tg.ready();
   tg.expand();
@@ -12,6 +13,7 @@ window.addEventListener('DOMContentLoaded', () => {
   };
 
   tg.onEvent('viewportChanged', updateVh);
+  window.addEventListener('resize', updateVh);
   updateVh();
 
   const applyTheme = () => {
