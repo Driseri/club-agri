@@ -18,7 +18,7 @@ jobs:
 
       # 2) Загружаем файлы по FTP
       - name: FTP Deploy
-        uses: SamKirkland/FTP-Deploy-Action@4.4.0
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           # Адрес вашего FTP-сервера
           server: ${{ secrets.FTP_HOST }}
@@ -28,6 +28,6 @@ jobs:
           # Локальная папка с собранным сайтом (замените, если у вас не ./public)
           local-dir: ./www
           # Путь на сервере, куда заливаются файлы (замените на ваш)
-          server-dir: /var/www/pupuclub.online
+          server-dir: /.
           # Доп. опции (можно убрать --insecure, если SSL-сертификат на сервере валидный)
           git-ftp-args: --insecure
