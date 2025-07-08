@@ -114,6 +114,7 @@ input[type="checkbox"] {
   position: relative;
   flex: 0 0 100%;
   margin-right: 0;
+  box-sizing: border-box;
   background: var(--tg-theme-secondary-bg-color, #fff);
   border-radius: 0.75rem;
   padding: 1rem;
@@ -200,6 +201,18 @@ input[type="checkbox"] {
   gap: 1rem;
   animation: scale 0.2s ease;
 }
+
+.time-modal {
+  background: var(--tg-theme-bg-color, #fff);
+  padding: 1rem;
+  border-radius: 1rem;
+  width: 280px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  animation: scale 0.2s ease;
+}
 @keyframes scale {
   from { transform: scale(0.9); opacity: 0; }
   to { transform: scale(1); opacity: 1; }
@@ -208,6 +221,67 @@ input[type="checkbox"] {
   position: relative;
   width: 200px;
   height: 200px;
+}
+.timer {
+  position: relative;
+  width: 200px;
+  height: 110px;
+}
+.timer svg {
+  width: 100%;
+  height: 100%;
+}
+#timeTrack {
+  fill: none;
+  stroke: var(--tg-theme-hint-color, #ccc);
+  stroke-width: 6;
+}
+#timeFill {
+  fill: none;
+  stroke: var(--tg-theme-button-color, #3390ec);
+  stroke-width: 6;
+  stroke-linecap: round;
+  transform: rotate(-90deg);
+  transform-origin: 100px 100px;
+}
+.time-thumb {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 20px;
+  height: 20px;
+  margin-left: -10px;
+  border-radius: 50%;
+  background: var(--tg-theme-button-color, #3390ec);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  transform-origin: 50% 100%;
+  transition: transform 0.3s cubic-bezier(.33,1,.68,1);
+}
+.time-display {
+  position: absolute;
+  left: 50%;
+  top: 20px;
+  transform: translateX(-50%);
+  font-size: 1.5rem;
+  color: var(--tg-theme-text-color, #222);
+}
+.time-display.pulse {
+  animation: pulse-scale 150ms;
+}
+@keyframes pulse-scale {
+  50% { transform: translateX(-50%) scale(1.2); }
+}
+.time-chips {
+  display: flex;
+  gap: 0.5rem;
+  width: 100%;
+}
+.time-chip {
+  flex: 1;
+  padding: 0.4rem 0.6rem;
+  border: none;
+  border-radius: 1rem;
+  background: var(--tg-theme-secondary-bg-color, #ddd);
 }
 .dial {
   position: absolute;
