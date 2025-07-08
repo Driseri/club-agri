@@ -8,25 +8,25 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div id="step-age" class="step active">
+  <div id="step-age" class="step container active">
     <label>Возраст ребёнка</label>
     <input type="number" id="age" min="3" max="18" value="6">
     <div id="ageError" class="error hidden">Возраст должен быть от 3 до 18 лет</div>
     <button id="ageNext">Далее</button>
   </div>
-  <div id="step-gender" class="step">
+  <div id="step-gender" class="step container">
     <label>Пол ребёнка</label>
     <label><input type="radio" name="gender" value="boy"> Мальчик</label>
     <label><input type="radio" name="gender" value="girl"> Девочка</label>
     <button id="genderNext" disabled>Далее</button>
   </div>
-  <div id="step-address" class="step">
+  <div id="step-address" class="step container">
     <label>Адрес проживания</label>
     <input type="text" id="address" placeholder="Введите адрес">
     <button id="geo">Определить по GPS</button>
     <button id="addressNext">Далее</button>
   </div>
-  <div id="step-transport" class="step">
+  <div id="step-transport" class="step container">
     <label>Предпочтительный способ добраться</label>
     <select id="transport">
       <option value="" selected disabled>Выберите</option>
@@ -37,13 +37,13 @@
     <div style="font-size:0.9rem">Этот выбор повлияет на расчёт маршрутов и времени в дальнейшем</div>
     <button id="transportNext" disabled>Далее</button>
   </div>
-  <div id="step-range" class="step">
+  <div id="step-range" class="step container">
     <label>Время в пути, мин</label>
     <input type="range" id="time" min="5" max="60" value="30">
     <div id="timeValue">До 30 мин</div>
     <button id="rangeNext">Далее</button>
   </div>
-  <div id="step-interests" class="step">
+  <div id="step-interests" class="step container">
     <label>Интересы ребёнка (до 5 направлений)</label>
     <div>
       <label><input type="checkbox" class="interest" value="sport"> Спорт</label>
