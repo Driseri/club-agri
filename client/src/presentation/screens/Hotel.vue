@@ -98,7 +98,7 @@ const easterEgg = {
 
 onMounted(() => {
   showBackButton(() => {
-    void router.push('/home')
+    void router.push('/')
   })
 
   easterEgg.start()
