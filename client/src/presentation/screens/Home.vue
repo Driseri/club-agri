@@ -317,7 +317,7 @@ onBeforeUnmount(() => {
           >
             <ListCard
               v-if="index === 3 || index === 5"
-              :title="index === 3 ? 'Users choice' : 'Hotel of the year'"
+              :title="index === 3 ? 'Выбор клиентов' : 'Лучшее совпадение'"
               :picture="hotel.picture"
               :picture-thumb="(hotel.pictureThumb as string)"
             >

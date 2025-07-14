@@ -4,9 +4,9 @@ import Thumbnails from '@/infra/store/thumbs/thumbs.json'
 const hotelsMock = [
   {
     id: 1,
-    title: 'Sunset Beach Hotel',
-    subtitle: 'Relax and unwind at our luxurious beachfront resort.',
-    description: 'Our hotel is located on the beautiful Sunset Beach, where you can enjoy stunning sunsets and a wide range of water activities. Our luxurious rooms and suites are designed to provide the ultimate comfort and relaxation, with breathtaking views of the ocean.',
+    title: 'Кормление поросей орехами',
+    subtitle: 'Меняйте детей на орехи',
+    description: 'Клуб запусков орехов по свиньям — это уникальное место, где точность, юмор и лёгкое безумие встречаются в одном выстреле. Участники тренируются метко кидать грецкие орехи в резиновых свиней, установленных на движущихся платформах. Каждый запуск — это мини-спектакль с аплодисментами, попаданиями и неожиданными философскими выводами. Подходит детям от 6 лет и взрослым с чувством абсурдного прекрасного.',
     address: '1234 Sunset Blvd, Sunset Beach, CA',
     rating: {
       votesCount: '2.4K',
@@ -23,7 +23,7 @@ const hotelsMock = [
       category: 'Beachfront',
     },
     price: Math.floor(Math.random() * 311) + 90,
-    picture: '/pics/hotel-1.jpg',
+    picture: '/pics/club1.jpg',
     rooms: [
       {
         id: 1,
@@ -43,9 +43,9 @@ const hotelsMock = [
   },
   {
     id: 2,
-    title: 'Mountain View Lodge',
-    subtitle: 'Escape to the mountains and enjoy stunning views and fresh air.',
-    description: 'Our lodge is nestled in the heart of the mountains, surrounded by breathtaking views and fresh air. Our cozy rooms and cabins are designed to provide the ultimate comfort and relaxation, with rustic decor and modern amenities.',
+    title: 'Робототехника не для детей',
+    subtitle: 'Собирайте роботов по разливу водки и забиву кальяна',
+    description: 'Робототехника не для детей — клуб для тех, кто хочет шагнуть за пределы скучных линейных актуаторов и паяльников "для начинающих". Здесь вы собираете роботов, которые умеют разливать водку с точностью бармена и забивать кальян с уважением к традициям.Каждое занятие — это смесь инженерной изобретательности, бытового сюрреализма и лёгкой техно-иронии. Идеально подойдёт тем, кто устал от "Ардуино-машинок" и готов к настоящей взрослой автоматике.',
     address: '5678 Mountain Rd, Mountain View, CO',
     rating: {
       votesCount: '1.7K',
@@ -62,7 +62,7 @@ const hotelsMock = [
       category: 'Mountain View',
     },
     price: Math.floor(Math.random() * 311) + 90,
-    picture: '/pics/hotel-2.jpg',
+    picture: '/pics/club2.jpg',
     rooms: [
       {
         id: 1,
@@ -89,9 +89,9 @@ const hotelsMock = [
   },
   {
     id: 3,
-    title: 'Seaside Resort',
-    subtitle: 'Experience the beauty of the ocean and relax in luxury.',
-    description: 'Our resort is located right on the beach, with stunning views of the ocean and luxurious amenities. Our rooms and suites are designed to provide the ultimate comfort and relaxation, with modern decor and top-notch facilities.',
+    title: 'Наезники на свинках',
+    subtitle: 'Оседлай хряка и лети',
+    description: 'Клуб наездников на свинках — это место, где отвага встречает хрюканье, а стиль — копытца. Участники осваивают искусство балансировки, манёвров и дипломатии с упрямыми, но харизматичными свинками. Каждый заезд — это смесь родео, киберпанка и деревенской эпопеи. Подходит всем, кто готов сесть в седло и пуститься в путешествие по тропам абсурда.',
     address: '1234 Ocean Blvd, Seaside, CA',
     rating: {
       votesCount: '2.3K',
@@ -108,7 +108,7 @@ const hotelsMock = [
       category: 'Seaside',
     },
     price: Math.floor(Math.random() * 311) + 90,
-    picture: '/pics/hotel-3.jpg',
+    picture: '/pics/club3.jpg',
     rooms: [
       {
         id: 1,
@@ -135,9 +135,9 @@ const hotelsMock = [
   },
   {
     id: 4,
-    title: 'City Center Hotel',
-    subtitle: 'Experience the excitement of the city and stay in the heart of it all.',
-    description: 'Our hotel is located in the bustling city center, with easy access to all the top attractions and entertainment. Our rooms and suites are designed to provide the ultimate comfort and convenience, with modern decor and all the amenities you need.',
+    title: 'Музыкальный клуб',
+    subtitle: 'От Хрю-хрю и фни-фни до Моргенштерна',
+    description: 'Клуб Мызки — это загадочное сообщество тех, кто мызкает, не объясняя что именно. Здесь мызкают с чувством, с толком и иногда даже с тряпкой, но чаще — с душой. Новичков не учат, а сразу погружают в процесс: сначала мызкаешь, потом понимаешь. Подходит тем, кто устал от логики и ищет чистоту в хаосе.',
     address: '4567 Main St, City Center, NY',
     rating: {
       votesCount: '1.2K',
@@ -154,7 +154,7 @@ const hotelsMock = [
       category: 'City Center',
     },
     price: Math.floor(Math.random() * 311) + 90,
-    picture: '/pics/hotel-4.jpg',
+    picture: '/pics/club4.jpg',
     rooms: [
       {
         id: 1,
@@ -181,9 +181,9 @@ const hotelsMock = [
   },
   {
     id: 5,
-    title: 'Desert Oasis Resort',
-    subtitle: 'Escape to the desert and enjoy the ultimate relaxation and tranquility.',
-    description: 'Our resort is located in the heart of the desert, surrounded by stunning landscapes and breathtaking views. Our rooms and suites are designed to provide the ultimate comfort and relaxation, with modern decor and top-notch facilities.',
+    title: 'Клуб Разделки',
+    subtitle: 'Забей хряка, пошинкуй и пожарь.',
+    description: 'Нет ничего лучше ребенка, который сам себе найдет еды и приготовит ее. Учим выживать детей от 2 до 34.',
     address: '7890 Desert Rd, Desert Oasis, AZ',
     rating: {
       votesCount: '1.5K',
@@ -200,7 +200,7 @@ const hotelsMock = [
       category: 'Desert Oasis',
     },
     price: Math.floor(Math.random() * 311) + 90,
-    picture: '/pics/hotel-5.jpg',
+    picture: '/pics/club5.jpg',
     rooms: [
       {
         id: 1,
@@ -239,7 +239,7 @@ const hotelsMock = [
       category: 'Tropical Island',
     },
     price: Math.floor(Math.random() * 311) + 90,
-    picture: '/pics/hotel-6.jpg',
+    picture: '/pics/club1.jpg',
     rooms: [
       {
         id: 1,
@@ -285,7 +285,7 @@ const hotelsMock = [
       category: 'Historic Town',
     },
     price: Math.floor(Math.random() * 311) + 90,
-    picture: '/pics/hotel-7.jpg',
+    picture: '/pics/club6.jpg',
     rooms: [
       {
         id: 1,
