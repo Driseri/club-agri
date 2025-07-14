@@ -3,28 +3,28 @@
  */
 export const reviews = [
   {
-    name: 'Blazing Bear',
+    name: 'Pupkina Zalupkina',
     rating: 5,
-    text: 'Great hotel, great service, great location',
+    text: 'Очень понравился подход педагога — ребёнок с радостью бежит на каждое занятие!',
   },
   {
-    name: 'Crazy Horse',
+    name: 'Zadrotkina Vsemposratovna',
     rating: 4.5,
-    text: 'Very nice hotel, but the food could be better',
+    text: 'За месяц занятий мой сын стал уверенно паять и разбираться в схемах — спасибо!',
   },
   {
-    name: 'Ugly Parrot',
+    name: 'Hueglotov Piskasratov',
     rating: 3,
-    text: 'Not bad, but not good either',
+    text: 'Прекрасная организация: всё вовремя, понятно и с заботой о детях.',
   },
   {
-    name: 'Grey Wolf',
+    name: 'Hueglotovna',
     rating: 5,
-    text: 'Nothing to complain about. Everything was perfect',
+    text: 'Дочка в восторге от уроков рисования, дома теперь только и делает, что рисует!',
   },
   {
-    name: 'Clever Fox',
+    name: 'Pizda Ivanovna',
     rating: 4.9,
-    text: 'I would definitely recommend this hotel to my friends',
+    text: 'Ходим уже третий месяц — отличная программа, результат заметен даже нам, родителям.',
   },
 ]

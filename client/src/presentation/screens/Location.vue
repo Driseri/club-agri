@@ -67,7 +67,7 @@ onMounted(() => {
   showMainButton('Select', () => {
     setCity(selectedId.value)
 
-    void router.push('/home')
+    void router.push('/')
   })
 
   showBackButton(() => {
