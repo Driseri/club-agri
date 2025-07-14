@@ -28,4 +28,14 @@ export default interface TripDetails {
    * The room in the selected hotel
    */
   room: number;
+
+  /**
+   * Preferred club directions
+   */
+  directions: number[];
+
+  /**
+   * Maximum travel time to the club in minutes
+   */
+  maxTravelTime: number;
 }

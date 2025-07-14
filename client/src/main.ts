@@ -3,6 +3,7 @@ import App from './App.vue'
 import Router from '@/application/router'
 import './presentation/styles/index.css'
 import { loadCities } from '@/infra/store/cities'
+import { loadDirections } from '@/infra/store/directions'
 import { useTelegram } from '@/application/services'
 import { getCSSVariable } from './infra/utils/dom'
 import { darkenColor } from './infra/utils/color'
@@ -16,7 +17,7 @@ import { darkenColor } from './infra/utils/color'
  * @todo cancel payment toast
  */
 
-const { platform, ready, showAlert } = useTelegram()
+const { platform, ready } = useTelegram()
 
 if (platform !== 'unknown') {
   switch (platform) {
@@ -78,7 +79,7 @@ function handleBrokenVariables(): void {
  * @todo load icons
  * @todo prepare image thumbs
  */
-void loadCities()
+void Promise.all([loadCities(), loadDirections()])
   .then(() => {
     const app = createApp(App)
 

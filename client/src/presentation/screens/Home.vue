@@ -1,7 +1,7 @@
 <!-- eslint-disable clean-timer/assign-timer-id -->
 <script setup lang="ts">
-import { Placeholder, List, ListItem, ListItemExpandable, Sections, Section, ListCard, DatePicker, DatePickerCompact, Amount, Rating, Text, Lottie } from '@/presentation/components'
-import { onMounted, ref, onBeforeUnmount, watchEffect, watch } from 'vue'
+import { Placeholder, List, ListItem, ListItemExpandable, Sections, Section, ListCard, DatePicker, DatePickerCompact, Amount, Rating, Text, Lottie, Slider } from '@/presentation/components'
+import { onMounted, ref, onBeforeUnmount, watchEffect, watch, computed } from 'vue'
 import { useTripDetails } from '@/domain/services/useTripDetails'
 import { useTelegram, useScroll, useLottie } from '@/application/services'
 import { hotels } from '@/infra/store/hotels/mock/hotels'
@@ -15,7 +15,14 @@ const {
   setStartDate,
   setEndDate,
   days,
+  setMaxTravelTime,
 } = useTripDetails()
+
+const directionsLabel = computed(() => {
+  return trip.directions.length > 0 ? `${trip.directions.length} selected` : 'Any'
+})
+
+const travelTimeLabel = computed(() => `${trip.maxTravelTime} min`)
 
 /**
  * Whether to show the start date picker
@@ -26,6 +33,11 @@ const startDatePickerShowed = ref(false)
  * Whether to show the end date picker
  */
 const endDatePickerShowed = ref(false)
+
+/**
+ * Whether to show the travel time picker
+ */
+const timePickerShowed = ref(false)
 
 /**
  * List loading state
@@ -62,6 +74,7 @@ const searchSettingsHeight = ref(130)
  */
 const startDatePicker = ref<InstanceType<typeof DatePicker> | null>(null)
 const endDatePicker = ref<InstanceType<typeof DatePicker> | null>(null)
+const timePicker = ref<HTMLElement | null>(null)
 
 /**
  * Reference to the landing
@@ -73,6 +86,7 @@ const landing = ref<InstanceType<typeof Placeholder> | null>(null)
  */
 const startDatePickerHeight = ref(0)
 const endDatePickerHeight = ref(0)
+const timePickerHeight = ref(0)
 
 /**
  * Viewport height. Used in CSS to calculate landing height
@@ -143,6 +157,7 @@ function onStartDateClick(): void {
   expand()
   startDatePickerShowed.value = !startDatePickerShowed.value
   endDatePickerShowed.value = false
+  timePickerShowed.value = false
 }
 
 /**
@@ -152,6 +167,14 @@ function onEndDateClick(): void {
   expand()
   endDatePickerShowed.value = !endDatePickerShowed.value
   startDatePickerShowed.value = false
+  timePickerShowed.value = false
+}
+
+function onTimeClick(): void {
+  expand()
+  timePickerShowed.value = !timePickerShowed.value
+  startDatePickerShowed.value = false
+  endDatePickerShowed.value = false
 }
 
 /**
@@ -168,6 +191,12 @@ watchEffect(() => {
     endDatePickerHeight.value = endDatePicker.value?.$el.offsetHeight ?? 0
   } else {
     endDatePickerHeight.value = 0
+  }
+
+  if (timePickerShowed.value) {
+    timePickerHeight.value = timePicker.value?.offsetHeight ?? 0
+  } else {
+    timePickerHeight.value = 0
   }
 })
 
@@ -301,6 +330,29 @@ onBeforeUnmount(() => {
             :right-icon-label="location?.title"
             to="/location"
           />
+          <ListItem
+            label="Directions"
+            right-icon="chevron-right"
+            :right-icon-label="directionsLabel"
+            to="/directions"
+          />
+          <ListItem
+            label="Max travel time"
+            right-icon="chevron-right"
+            :right-icon-label="travelTimeLabel"
+            @click="onTimeClick"
+          />
+          <ListItemExpandable :opened="timePickerShowed">
+            <div ref="timePicker">
+              <Slider
+                :model-value="trip.maxTravelTime"
+                :min="0"
+                :max="60"
+                :step="5"
+                @update:model-value="setMaxTravelTime"
+              />
+            </div>
+          </ListItemExpandable>
         </List>
       </Section>
       <Section
@@ -411,7 +463,7 @@ onBeforeUnmount(() => {
   padding-block: 20px;
 
   &:not(&--loaded) {
-    height: calc(var(--tg-viewport-stable-height) - v-bind('searchSettingsHeight + "px"') - var(--size-cell-h-margin) - var(--size-cell-v-margin) - v-bind('startDatePickerHeight + "px"') - v-bind('endDatePickerHeight + "px"'));
+    height: calc(var(--tg-viewport-stable-height) - v-bind('searchSettingsHeight + "px"') - var(--size-cell-h-margin) - var(--size-cell-v-margin) - v-bind('startDatePickerHeight + "px"') - v-bind('endDatePickerHeight + "px"') - v-bind('timePickerHeight + "px"'));
   }
 
   &--loading,
