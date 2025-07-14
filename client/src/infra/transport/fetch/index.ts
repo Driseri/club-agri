@@ -108,7 +108,8 @@ export default class FetchTransport {
     if (this.options?.errorFormatter !== undefined) {
       throw this.options.errorFormatter(response.status, payload, endpoint)
     } else {
-      throw new Error(`${response.statusText || 'Bad response'} (requesting ${endpoint}))`)
+      const statusText = response.statusText === '' ? 'Bad response' : response.statusText
+      throw new Error(`${statusText} (requesting ${endpoint}))`)
     }
   }
 }

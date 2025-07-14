@@ -4,6 +4,7 @@ import Start from '@/presentation/screens/Start.vue'
 import Hotel from '@/presentation/screens/Hotel.vue'
 import Room from '@/presentation/screens/Room.vue'
 import Location from '@/presentation/screens/Location.vue'
+import Directions from '@/presentation/screens/Directions.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -17,6 +18,10 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/location',
     component: Location,
+  },
+  {
+    path: '/directions',
+    component: Directions,
   },
   {
     path: '/hotel/:id',

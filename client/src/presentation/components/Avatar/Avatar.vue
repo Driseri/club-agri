@@ -62,10 +62,10 @@ const abbreviation = computed(() => {
  * Background color of the placeholder
  */
 const backgroundColor = computed(() => {
-  let [color, topColor, bottomColor] = bgColors[Math.floor(Math.random() * bgColors.length)]
+  let [, topColor, bottomColor] = bgColors[Math.floor(Math.random() * bgColors.length)]
 
   if (props.id !== undefined) {
-    [color, topColor, bottomColor] = bgColors[props.id % 7]
+    [, topColor, bottomColor] = bgColors[props.id % 7]
   }
 
   return `linear-gradient(180deg, ${topColor} 0%, ${bottomColor} 100%)`

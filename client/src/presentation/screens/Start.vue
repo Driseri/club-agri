@@ -26,7 +26,11 @@ onBeforeUnmount(() => {
       caption="Этот сервис позволяет подобрать удобные клубы поблизости"
     >
       <template #picture>
-        <img src="/telebook.svg" aria-hidden="true" width="80" />
+        <img
+          src="/telebook.svg"
+          aria-hidden="true"
+          width="80"
+        >
       </template>
     </Placeholder>
   </div>

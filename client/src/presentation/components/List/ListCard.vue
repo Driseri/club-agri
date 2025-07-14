@@ -130,7 +130,9 @@ function reserveSpace(): void {
   const cardRect = card.value.getBoundingClientRect()
 
   void nextTick(() => {
-    card.value!.style.position = 'fixed'
+    if (card.value !== null) {
+      card.value.style.position = 'fixed'
+    }
 
     /**
      * Fixe the width of content to prevent it from jumping when card gets expanded
