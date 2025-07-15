@@ -23,7 +23,9 @@ const directionsLabel = computed(() => {
   return trip.directions.length > 0 ? `${trip.directions.length} selected` : 'Any'
 })
 
-const travelTimeLabel = computed(() => `${trip.maxTravelTime} min`)
+const travelTimeLabel = computed(() => {
+  return trip.maxTravelTime >= 65 ? 'Не важно' : `${trip.maxTravelTime} min`
+})
 
 const transportLabel = computed(() => trip.transport === 'walking' ? 'Пешком' : 'На машине')
 
@@ -366,30 +368,16 @@ onBeforeUnmount(() => {
             to="/directions"
           />
           <ListItem
-            label="Max travel time"
-            right-icon="chevron-right"
-            :right-icon-label="travelTimeLabel"
-            @click="onTimeClick"
-          />
-          <ListItemExpandable :opened="timePickerShowed">
-            <div ref="timePicker">
-              <Slider
-                :model-value="trip.maxTravelTime"
-                :min="0"
-                :max="60"
-                :step="5"
-                @update:model-value="setMaxTravelTime"
-              />
-            </div>
-          </ListItemExpandable>
-          <ListItem
             label="Как добираться"
             right-icon="chevron-right"
             :right-icon-label="transportLabel"
             @click="onTransportClick"
           />
           <ListItemExpandable :opened="transportPickerShowed">
-            <div ref="transportPicker" class="transport-picker">
+            <div
+              ref="transportPicker"
+              class="transport-picker"
+            >
               <button
                 :class="{ selected: trip.transport === 'walking' }"
                 @click="selectTransport('walking')"
@@ -402,6 +390,26 @@ onBeforeUnmount(() => {
               >
                 На машине
               </button>
+            </div>
+          </ListItemExpandable>
+          <ListItem
+            label="Max travel time"
+            right-icon="chevron-right"
+            :right-icon-label="travelTimeLabel"
+            @click="onTimeClick"
+          />
+          <ListItemExpandable :opened="timePickerShowed">
+            <div
+              ref="timePicker"
+              class="time-picker"
+            >
+              <Slider
+                :model-value="trip.maxTravelTime"
+                :min="5"
+                :max="65"
+                :step="5"
+                @update:model-value="setMaxTravelTime"
+              />
             </div>
           </ListItemExpandable>
         </List>
@@ -614,6 +622,10 @@ onBeforeUnmount(() => {
 
 .results {
   min-height: 800px;
+}
+
+.time-picker {
+  padding: 15px var(--size-cell-h-padding);
 }
 
 .transport-picker {
