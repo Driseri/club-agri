@@ -6,7 +6,7 @@ import { useTripDetails } from '@/domain/services/useTripDetails'
 import { useTelegram, useScroll, useLottie } from '@/application/services'
 import { hotels } from '@/infra/store/hotels/mock/hotels'
 import { shortNumber } from '@/infra/utils/number'
-import { type Hotel } from '@/domain/entities'
+import { type Hotel, type TripDetails } from '@/domain/entities'
 
 const {
   trip,
@@ -16,6 +16,7 @@ const {
   setEndDate,
   days,
   setMaxTravelTime,
+  setTransport,
 } = useTripDetails()
 
 const directionsLabel = computed(() => {
@@ -23,6 +24,8 @@ const directionsLabel = computed(() => {
 })
 
 const travelTimeLabel = computed(() => `${trip.maxTravelTime} min`)
+
+const transportLabel = computed(() => trip.transport === 'walking' ? 'Пешком' : 'На машине')
 
 /**
  * Whether to show the start date picker
@@ -38,6 +41,11 @@ const endDatePickerShowed = ref(false)
  * Whether to show the travel time picker
  */
 const timePickerShowed = ref(false)
+
+/**
+ * Whether to show the transport picker
+ */
+const transportPickerShowed = ref(false)
 
 /**
  * List loading state
@@ -75,6 +83,7 @@ const searchSettingsHeight = ref(130)
 const startDatePicker = ref<InstanceType<typeof DatePicker> | null>(null)
 const endDatePicker = ref<InstanceType<typeof DatePicker> | null>(null)
 const timePicker = ref<HTMLElement | null>(null)
+const transportPicker = ref<HTMLElement | null>(null)
 
 /**
  * Reference to the landing
@@ -87,6 +96,7 @@ const landing = ref<InstanceType<typeof Placeholder> | null>(null)
 const startDatePickerHeight = ref(0)
 const endDatePickerHeight = ref(0)
 const timePickerHeight = ref(0)
+const transportPickerHeight = ref(0)
 
 /**
  * Viewport height. Used in CSS to calculate landing height
@@ -177,6 +187,19 @@ function onTimeClick(): void {
   endDatePickerShowed.value = false
 }
 
+function onTransportClick(): void {
+  expand()
+  transportPickerShowed.value = !transportPickerShowed.value
+  startDatePickerShowed.value = false
+  endDatePickerShowed.value = false
+  timePickerShowed.value = false
+}
+
+function selectTransport(transport: TripDetails['transport']): void {
+  setTransport(transport)
+  transportPickerShowed.value = false
+}
+
 /**
  * We need to update stored date picker height because it is used to calculate "landing" height
  */
@@ -197,6 +220,12 @@ watchEffect(() => {
     timePickerHeight.value = timePicker.value?.offsetHeight ?? 0
   } else {
     timePickerHeight.value = 0
+  }
+
+  if (transportPickerShowed.value) {
+    transportPickerHeight.value = transportPicker.value?.offsetHeight ?? 0
+  } else {
+    transportPickerHeight.value = 0
   }
 })
 
@@ -353,6 +382,28 @@ onBeforeUnmount(() => {
               />
             </div>
           </ListItemExpandable>
+          <ListItem
+            label="Как добираться"
+            right-icon="chevron-right"
+            :right-icon-label="transportLabel"
+            @click="onTransportClick"
+          />
+          <ListItemExpandable :opened="transportPickerShowed">
+            <div ref="transportPicker" class="transport-picker">
+              <button
+                :class="{ selected: trip.transport === 'walking' }"
+                @click="selectTransport('walking')"
+              >
+                Пешком
+              </button>
+              <button
+                :class="{ selected: trip.transport === 'car' }"
+                @click="selectTransport('car')"
+              >
+                На машине
+              </button>
+            </div>
+          </ListItemExpandable>
         </List>
       </Section>
       <Section
@@ -463,7 +514,7 @@ onBeforeUnmount(() => {
   padding-block: 20px;
 
   &:not(&--loaded) {
-    height: calc(var(--tg-viewport-stable-height) - v-bind('searchSettingsHeight + "px"') - var(--size-cell-h-margin) - var(--size-cell-v-margin) - v-bind('startDatePickerHeight + "px"') - v-bind('endDatePickerHeight + "px"') - v-bind('timePickerHeight + "px"'));
+    height: calc(var(--tg-viewport-stable-height) - v-bind('searchSettingsHeight + "px"') - var(--size-cell-h-margin) - var(--size-cell-v-margin) - v-bind('startDatePickerHeight + "px"') - v-bind('endDatePickerHeight + "px"') - v-bind('timePickerHeight + "px"') - v-bind('transportPickerHeight + "px"'));
   }
 
   &--loading,
@@ -563,6 +614,27 @@ onBeforeUnmount(() => {
 
 .results {
   min-height: 800px;
+}
+
+.transport-picker {
+  display: flex;
+  gap: 10px;
+  padding: 10px var(--size-cell-h-padding) 20px;
+
+  button {
+    flex: 1;
+    padding: 6px 14px;
+    border-radius: var(--size-border-radius-small);
+    background-color: var(--color-bg-tertiary);
+    border: none;
+    color: var(--color-text);
+    @apply --headline;
+
+    &.selected {
+      background-color: var(--color-link);
+      color: #fff;
+    }
+  }
 }
 
 .switch-enter-active,

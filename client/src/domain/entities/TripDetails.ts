@@ -38,4 +38,9 @@ export default interface TripDetails {
    * Maximum travel time to the club in minutes
    */
   maxTravelTime: number;
+
+  /**
+   * Preferred transportation method
+   */
+  transport: 'walking' | 'car';
 }

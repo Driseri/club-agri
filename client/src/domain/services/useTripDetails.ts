@@ -54,6 +54,11 @@ interface useTripDetailsComposableState {
   setMaxTravelTime: (time: TripDetails['maxTravelTime']) => void;
 
   /**
+   * Sets preferred transport type
+   */
+  setTransport: (transport: TripDetails['transport']) => void;
+
+  /**
    * Information about current trip
    */
   trip: UnwrapNestedRefs<TripDetails>;
@@ -88,6 +93,7 @@ const trip = reactive<TripDetails>({
   room: 0,
   directions: [],
   maxTravelTime: 30,
+  transport: 'walking',
 })
 
 /**
@@ -149,6 +155,10 @@ export const useTripDetails = createSharedComposable((): useTripDetailsComposabl
     trip.maxTravelTime = time
   }
 
+  function setTransport(transport: TripDetails['transport']): void {
+    trip.transport = transport
+  }
+
   /**
    * Currently selected location based on trip details
    */
@@ -192,6 +202,7 @@ export const useTripDetails = createSharedComposable((): useTripDetailsComposabl
     setRoom,
     setDirections,
     setMaxTravelTime,
+    setTransport,
     trip,
     location,
     selectDefault,
