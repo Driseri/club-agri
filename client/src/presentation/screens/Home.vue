@@ -281,8 +281,8 @@ onBeforeUnmount(() => {
     <Placeholder
       ref="landing"
       class="landing"
-      title="Telebook"
-      caption="As simple as messaging"
+      title="ClubBook"
+      caption="Просто - как пустить шептуна"
       :class="{
         'landing--loading': isLoading,
         'landing--loaded': isSearchFinished,
@@ -452,8 +452,8 @@ onBeforeUnmount(() => {
                       <ListItem
                         :id="hotel.id"
                         transaction-icon="clock-fill"
-                        title="Check rooms"
-                        :subtitle="`There are ${hotel.rooms.length} rooms available`"
+                        title="Подробнее"
+                        :subtitle="`Доступно ${hotel.rooms.length} групп`"
                         :to="`/hotel/${hotel.id}`"
                         right-icon="chevron-right"
                         standalone
