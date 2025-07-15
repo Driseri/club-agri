@@ -1,6 +1,6 @@
 <!-- eslint-disable clean-timer/assign-timer-id -->
 <script setup lang="ts">
-import { Placeholder, List, ListItem, ListItemExpandable, Sections, Section, ListCard, DatePicker, DatePickerCompact, Amount, Rating, Text, Lottie, Slider } from '@/presentation/components'
+import { Placeholder, List, ListItem, ListItemExpandable, Sections, Section, ListCard, Amount, Rating, Text, Lottie, Slider } from '@/presentation/components'
 import { onMounted, ref, onBeforeUnmount, watchEffect, watch, computed } from 'vue'
 import { useTripDetails } from '@/domain/services/useTripDetails'
 import { useTelegram, useScroll, useLottie } from '@/application/services'
@@ -12,8 +12,7 @@ const {
   trip,
   location,
   selectDefault: selectDefaultLocation,
-  setStartDate,
-  setEndDate,
+  setAddress,
   days,
   setMaxTravelTime,
   setTransport,
@@ -32,12 +31,7 @@ const transportLabel = computed(() => trip.transport === 'walking' ? 'Пешко
 /**
  * Whether to show the start date picker
  */
-const startDatePickerShowed = ref(false)
-
-/**
- * Whether to show the end date picker
- */
-const endDatePickerShowed = ref(false)
+const addressPickerShowed = ref(false)
 
 /**
  * Whether to show the travel time picker
@@ -82,8 +76,7 @@ const searchSettingsHeight = ref(130)
 /**
  * Reference to the date pickers
  */
-const startDatePicker = ref<InstanceType<typeof DatePicker> | null>(null)
-const endDatePicker = ref<InstanceType<typeof DatePicker> | null>(null)
+const addressPicker = ref<HTMLElement | null>(null)
 const timePicker = ref<HTMLElement | null>(null)
 const transportPicker = ref<HTMLElement | null>(null)
 
@@ -95,8 +88,7 @@ const landing = ref<InstanceType<typeof Placeholder> | null>(null)
 /**
  * Height of the date pickers. Changed after opening of DatePicker, used in CSS to calculate landing height
  */
-const startDatePickerHeight = ref(0)
-const endDatePickerHeight = ref(0)
+const addressPickerHeight = ref(0)
 const timePickerHeight = ref(0)
 const transportPickerHeight = ref(0)
 
@@ -114,8 +106,9 @@ function onBeforeSearch(): void {
   requestAnimationFrame(() => {
     isLoading.value = true
     isSearchFinished.value = false
-    startDatePickerShowed.value = false
-    endDatePickerShowed.value = false
+    addressPickerShowed.value = false
+    timePickerShowed.value = false
+    transportPickerShowed.value = false
 
     setButtonLoader(true)
   })
@@ -162,38 +155,24 @@ function search(): void {
   }, 3000)
 }
 
-/**
- * Handle start date click
- */
-function onStartDateClick(): void {
+function onAddressClick(): void {
   expand()
-  startDatePickerShowed.value = !startDatePickerShowed.value
-  endDatePickerShowed.value = false
+  addressPickerShowed.value = !addressPickerShowed.value
   timePickerShowed.value = false
-}
-
-/**
- * Handle end date click
- */
-function onEndDateClick(): void {
-  expand()
-  endDatePickerShowed.value = !endDatePickerShowed.value
-  startDatePickerShowed.value = false
-  timePickerShowed.value = false
+  transportPickerShowed.value = false
 }
 
 function onTimeClick(): void {
   expand()
   timePickerShowed.value = !timePickerShowed.value
-  startDatePickerShowed.value = false
-  endDatePickerShowed.value = false
+  addressPickerShowed.value = false
+  transportPickerShowed.value = false
 }
 
 function onTransportClick(): void {
   expand()
   transportPickerShowed.value = !transportPickerShowed.value
-  startDatePickerShowed.value = false
-  endDatePickerShowed.value = false
+  addressPickerShowed.value = false
   timePickerShowed.value = false
 }
 
@@ -206,18 +185,6 @@ function selectTransport(transport: TripDetails['transport']): void {
  * We need to update stored date picker height because it is used to calculate "landing" height
  */
 watchEffect(() => {
-  if (startDatePickerShowed.value) {
-    startDatePickerHeight.value = startDatePicker.value?.$el.offsetHeight ?? 0
-  } else {
-    startDatePickerHeight.value = 0
-  }
-
-  if (endDatePickerShowed.value) {
-    endDatePickerHeight.value = endDatePicker.value?.$el.offsetHeight ?? 0
-  } else {
-    endDatePickerHeight.value = 0
-  }
-
   if (timePickerShowed.value) {
     timePickerHeight.value = timePicker.value?.offsetHeight ?? 0
   } else {
@@ -228,6 +195,12 @@ watchEffect(() => {
     transportPickerHeight.value = transportPicker.value?.offsetHeight ?? 0
   } else {
     transportPickerHeight.value = 0
+  }
+
+  if (addressPickerShowed.value) {
+    addressPickerHeight.value = addressPicker.value?.offsetHeight ?? 0
+  } else {
+    addressPickerHeight.value = 0
   }
 })
 
@@ -243,16 +216,8 @@ function resetSearch(): void {
   })
 }
 
-watch([
-  () => trip.startDate,
-  () => trip.endDate,
-], () => {
-  resetSearch()
 
-  if (trip.startDate.getTime() > trip.endDate.getTime()) {
-    setEndDate(new Date(trip.startDate.getTime() + 24 * 60 * 60 * 1000))
-  }
-})
+
 
 onMounted(() => {
   if (trip.city === 0) {
@@ -318,49 +283,27 @@ onBeforeUnmount(() => {
           with-background
           standalone
         >
-          <ListItem label="Travel date">
-            <template #right>
-              <DatePickerCompact
-                :value="trip.startDate"
-                @click="onStartDateClick"
-              />
-            </template>
-          </ListItem>
-          <ListItemExpandable
-            :opened="startDatePickerShowed"
-          >
-            <DatePicker
-              ref="startDatePicker"
-              :min-date="new Date()"
-              @date-pick="(date) => setStartDate(date)"
-            />
-          </ListItemExpandable>
-          <ListItem label="End date">
-            <template #right>
-              <DatePickerCompact
-                :value="trip.endDate"
-                @click="onEndDateClick"
-              />
-            </template>
-          </ListItem>
-          <ListItemExpandable
-            :opened="endDatePickerShowed"
-          >
-            <!-- Max date is start + 60 -->
-            <DatePicker
-              ref="endDatePicker"
-              :min-date="trip.startDate || new Date()"
-              :max-date="new Date(trip.startDate.getTime() + 60 * 24 * 60 * 60 * 1000)"
-              :value="trip.endDate"
-              @date-pick="(date) => setEndDate(date)"
-            />
-          </ListItemExpandable>
+          
+
           <ListItem
             label="Location"
             right-icon="chevron-right"
             :right-icon-label="location?.title"
             to="/location"
           />
+          <ListItem
+            label="Адрес проживания"
+            right-icon="chevron-right"
+            :right-icon-label="trip.address || 'Не указан'"
+            @click="onAddressClick"
+          />
+          <ListItemExpandable :opened="addressPickerShowed">
+            <div ref="addressPicker" class="address-picker">
+              <div class="input-container">
+                <input v-model="trip.address" placeholder="Введите адрес проживания" class="address-input" />
+              </div>
+            </div>
+          </ListItemExpandable>
           <ListItem
             label="Directions"
             right-icon="chevron-right"
@@ -522,7 +465,7 @@ onBeforeUnmount(() => {
   padding-block: 20px;
 
   &:not(&--loaded) {
-    height: calc(var(--tg-viewport-stable-height) - v-bind('searchSettingsHeight + "px"') - var(--size-cell-h-margin) - var(--size-cell-v-margin) - v-bind('startDatePickerHeight + "px"') - v-bind('endDatePickerHeight + "px"') - v-bind('timePickerHeight + "px"') - v-bind('transportPickerHeight + "px"'));
+    height: calc(var(--tg-viewport-stable-height) - v-bind('searchSettingsHeight + "px"') - var(--size-cell-h-margin) - var(--size-cell-v-margin) - v-bind('addressPickerHeight + "px"') - v-bind('timePickerHeight + "px"') - v-bind('transportPickerHeight + "px"'));
   }
 
   &--loading,
@@ -646,6 +589,40 @@ onBeforeUnmount(() => {
       background-color: var(--color-link);
       color: #fff;
     }
+  }
+}
+
+.address-picker {
+  padding: 10px var(--size-cell-h-padding) 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.input-container {
+  display: flex;
+  align-items: center;
+  background-color: var(--color-bg-tertiary);
+  border-radius: var(--size-border-radius-small);
+  padding: 0 12px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.address-input {
+  width: 100%;
+  padding: 8px 0;
+  border: none;
+  background-color: transparent;
+  color: var(--color-text);
+  @apply --headline;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  box-sizing: border-box;
+  outline: none;
+  
+  &::placeholder {
+    color: var(--color-hint);
   }
 }
 

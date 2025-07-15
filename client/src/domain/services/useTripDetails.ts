@@ -59,6 +59,11 @@ interface useTripDetailsComposableState {
   setTransport: (transport: TripDetails['transport']) => void;
 
   /**
+   * Sets the residence address
+   */
+  setAddress: (address: string) => void;
+
+  /**
    * Information about current trip
    */
   trip: UnwrapNestedRefs<TripDetails>;
@@ -94,6 +99,7 @@ const trip = reactive<TripDetails>({
   directions: [],
   maxTravelTime: 30,
   transport: 'walking',
+  address: '',
 })
 
 /**
@@ -160,6 +166,15 @@ export const useTripDetails = createSharedComposable((): useTripDetailsComposabl
   }
 
   /**
+   * Sets the residence address
+   * 
+   * @param address - The residence address
+   */
+  function setAddress(address: string): void {
+    trip.address = address
+  }
+
+  /**
    * Currently selected location based on trip details
    */
   const location = computed(() => {
@@ -203,6 +218,7 @@ export const useTripDetails = createSharedComposable((): useTripDetailsComposabl
     setDirections,
     setMaxTravelTime,
     setTransport,
+    setAddress,
     trip,
     location,
     selectDefault,

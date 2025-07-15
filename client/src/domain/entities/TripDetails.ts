@@ -43,4 +43,9 @@ export default interface TripDetails {
    * Preferred transportation method
    */
   transport: 'walking' | 'car';
+
+  /**
+   * Residence address
+   */
+  address?: string;
 }
