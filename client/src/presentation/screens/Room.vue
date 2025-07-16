@@ -154,7 +154,7 @@ onMounted(() => {
   })
 
   showBackButton(() => {
-    void router.push(`/hotel/${hotelId.value}`)
+    void router.back()
   })
 
   footerShowingDelay.value = setTimeout(() => {
