@@ -68,7 +68,7 @@ onMounted(() => {
 
   expand()
 
-  showMainButton('Select', () => {
+  showMainButton('Выбрать', () => {
     setDirections(selectedIds.value)
 
     void router.push('/home')
@@ -93,7 +93,7 @@ onBeforeUnmount(() => {
       >
         <Input
           v-model="searchQuery"
-          placeholder="Search for a direction"
+          placeholder="Поиск по направлениям"
           left-icon="search"
         />
       </Section>
@@ -121,8 +121,8 @@ onBeforeUnmount(() => {
       </Section>
       <Placeholder
         v-else
-        title="No results"
-        caption="Try searching for something else"
+        title="Ничего не найдено"
+        caption="Попробуйте изменить запрос поиска"
       >
         <template #picture>
           <Lottie

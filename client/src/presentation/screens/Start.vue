@@ -23,7 +23,7 @@ onBeforeUnmount(() => {
   <div class="start-page">
     <Placeholder
       title="Club Agri"
-      caption="Этот сервис позволяет подобрать удобные клубы поблизости"
+      caption="Этот сервис позволяет подобрать детские кружки и группы поблизости"
     >
       <template #picture>
         <img
