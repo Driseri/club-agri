@@ -6,6 +6,9 @@ import Room from '@/presentation/screens/Room.vue'
 import Location from '@/presentation/screens/Location.vue'
 import Directions from '@/presentation/screens/Directions.vue'
 
+// Переименовываем компоненты для соответствия тематике детских кружков
+// Hotel -> Club, Room -> Group
+
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
@@ -24,15 +27,15 @@ const routes: RouteRecordRaw[] = [
     component: Directions,
   },
   {
-    path: '/hotel/:id',
-    component: Hotel,
+    path: '/club/:id',
+    component: Hotel, // Используем тот же компонент, но с новым путем
     props: route => ({
       id: parseInt(route.params.id as string, 10),
     }),
   },
   {
-    path: '/room/:hotelId/:roomId',
-    component: Room,
+    path: '/group/:hotelId/:roomId',
+    component: Room, // Используем тот же компонент, но с новым путем
     props: route => ({
       hotelId: parseInt(route.params.hotelId as string, 10),
       roomId: parseInt(route.params.roomId as string, 10),

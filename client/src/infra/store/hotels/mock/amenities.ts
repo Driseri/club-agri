@@ -1,29 +1,29 @@
 /**
- * Mocked room amenities
+ * Mocked group features
  */
 export const amenities = [
   {
     icon: 'square-filled-wifi',
-    name: 'Free Wi-Fi',
+    name: 'Малая группа (до 8 детей)',
   },
   {
     icon: 'square-filled-bed',
-    name: 'King size bed',
+    name: 'Опытные преподаватели',
   },
   {
     icon: 'square-filled-air',
-    name: 'Air Conditioner',
+    name: 'Комфортные помещения',
   },
   {
     icon: 'square-filled-parking',
-    name: 'Free parking',
+    name: 'Бесплатная парковка',
   },
   {
     icon: 'square-filled-safe',
-    name: 'Safety deposit box',
+    name: 'Безопасное оборудование',
   },
   {
     icon: 'square-filled-sport',
-    name: 'Sport facilities',
+    name: 'Спортивные активности',
   },
 ]

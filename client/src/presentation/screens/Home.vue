@@ -405,7 +405,7 @@ onBeforeUnmount(() => {
                         transaction-icon="clock-fill"
                         title="Подробнее"
                         :subtitle="`Доступно ${hotel.rooms.length} групп`"
-                        :to="`/hotel/${hotel.id}`"
+                        :to="`/club/${hotel.id}`"
                         right-icon="chevron-right"
                         standalone
                       />
@@ -420,7 +420,7 @@ onBeforeUnmount(() => {
               :avatar="{src: hotel.picture, placeholder: hotel.title, pictureThumb: hotel.pictureThumb}"
               :title="hotel.title"
               :subtitle="hotel.subtitle"
-              :to="`/hotel/${hotel.id}`"
+              :to="`/club/${hotel.id}`"
               big-avatar
               standalone
               :is-loading="isLoading"
@@ -433,7 +433,7 @@ onBeforeUnmount(() => {
                     </template>
                     {{ shortNumber(hotel.price * days) }}$
                     <template #subline>
-                      for {{ days }} night{{ days > 1 ? 's' : '' }}
+                      за {{ days }} занят{{ days > 1 ? 'ия' : 'ие' }}
                     </template>
                   </Amount>
                 </div>

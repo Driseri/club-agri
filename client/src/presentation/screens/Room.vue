@@ -10,12 +10,12 @@ import { useRouter } from 'vue-router'
 
 const props = defineProps({
   /**
-   * Selected hotel identifier (got from route params)
+   * Selected club identifier (got from route params)
    */
   hotelId: Number,
 
   /**
-   * Identifier of the selected room in a hotel (got from route params)
+   * Identifier of the selected group in a club (got from route params)
    */
   roomId: Number,
 }) as {
@@ -24,12 +24,12 @@ const props = defineProps({
 }
 
 /**
- * Selected hotel identifier
+ * Selected club identifier
  */
 const hotelId = computed(() => props.hotelId)
 
 /**
- * Identifier of the selected room in a hotel
+ * Identifier of the selected group in a club
  */
 const roomId = computed(() => props.roomId)
 
@@ -40,7 +40,7 @@ const { create: createInvoice, toPrice } = useInvoice()
 const router = useRouter()
 
 /**
- * Selected room data
+ * Selected group data
  */
 const room = computed(() => {
   if (hotel.value === undefined) {
@@ -51,7 +51,7 @@ const room = computed(() => {
 })
 
 /**
- * Total price for the selected room for the selected days
+ * Total price for the selected group for the selected days
  * Does not include service fee
  */
 const roomAmount = computed(() => {
@@ -71,7 +71,7 @@ async function buttonClicked(): Promise<void> {
   setButtonLoader(true)
 
   if (room.value === undefined) {
-    showAlert('Room not found')
+    showAlert('Group not found')
 
     return
   }
@@ -87,19 +87,19 @@ async function buttonClicked(): Promise<void> {
     need_name: true,
     prices: [
       {
-        label: `Room ${days.value} × ${room.value.price}$`,
+        label: `Группа ${days.value} × ${room.value.price}$`,
         amount: toPrice(room.value.price * days.value),
       },
       {
-        label: 'Transfer',
+        label: 'Трансфер',
         amount: toPrice(100),
       },
       {
-        label: 'Service fee',
+        label: 'Сервисный сбор',
         amount: 0,
       },
       {
-        label: 'Breakfast included',
+        label: 'Материалы включены',
         amount: 0,
       },
     ],
@@ -149,7 +149,7 @@ onMounted(() => {
   /**
    * Show main Telegram CTA
    */
-  showMainButton('Book now', () => {
+  showMainButton('Записаться', () => {
     void buttonClicked()
   })
 
@@ -205,28 +205,28 @@ onBeforeUnmount(() => {
 
           <Section
             padded
-            title="Price"
+            title="Стоимость"
           >
             <List
               with-background
               standalone
             >
               <ListItem
-                label="Room price"
+                label="Стоимость занятия"
               >
                 <template #right>
                   <span>{{ Math.max(1, days) }} × {{ room.price }}$</span>
                 </template>
               </ListItem>
               <ListItem
-                label="Breakfast"
+                label="Материалы"
               >
                 <template #right>
-                  <span>Included</span>
+                  <span>Включены</span>
                 </template>
               </ListItem>
               <ListItem
-                label="Transfer"
+                label="Трансфер"
               >
                 <template #right>
                   <Amount>100$</Amount>
@@ -235,7 +235,7 @@ onBeforeUnmount(() => {
             </List>
           </Section>
           <Section
-            title="Amenities"
+            title="Особенности группы"
             padded
           >
             <List
@@ -260,8 +260,8 @@ onBeforeUnmount(() => {
         class="price"
       >
         <ListItem
-          title="Total Price"
-          :subtitle="`For ${days} night${days > 1 ? 's' : ''} stand`"
+          title="Итоговая стоимость"
+          :subtitle="`За ${days} занятие${days > 1 ? 'я' : ''}`"
         >
           <template #picture>
             <Icon

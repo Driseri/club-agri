@@ -149,7 +149,7 @@ onBeforeUnmount(() => {
         </Text>
       </Section>
       <Section
-        title="Rooms"
+        title="Группы"
         padded
       >
         <List gapped>
@@ -159,7 +159,7 @@ onBeforeUnmount(() => {
             :key="hotel.id + '@' + room.id"
             :title="room.title"
             :subtitle="room.subtitle"
-            :to="`/room/${hotel.id}/${room.id}`"
+            :to="`/group/${hotel.id}/${room.id}`"
             big-avatar
             standalone
           >
@@ -189,11 +189,11 @@ onBeforeUnmount(() => {
                   {{ room.price }}$
 
                   <template #postfix>
-                    / night
+                    / занятие
                   </template>
                 </Amount>
                 <div class="book">
-                  Book
+                  Записаться
                 </div>
               </div>
             </template>
