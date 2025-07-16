@@ -35,7 +35,7 @@ defineProps<{
     <div class="divider" />
 
     <DataOverviewItem
-      title="Awards"
+      title="Награды"
     >
       <template #content>
         <div class="award">
@@ -55,10 +55,10 @@ defineProps<{
     <div class="divider" />
 
     <DataOverviewItem
-      title="Charts"
+      title="В рейтинге клубов"
     >
       <template #content>
-        <Amount prefix="No.">
+        <Amount prefix="№">
           {{ chart.place }}
         </Amount>
       </template>
